@@ -70,7 +70,7 @@ sub depends
 
     unless( defined $time )
     {
-      print STDERR $target->file, " doesn't exist\n" if $self->Verbose;
+      print STDERR "    target `", $target->file, "' doesn't exist\n" if $self->Verbose;
 
       $depends{$target->file} = \%deps;
     }
