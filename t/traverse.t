@@ -58,7 +58,6 @@ if ( $create )
 
 my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );
 
-$DB::single=1;
 # must rid ourselves of those pesky attributes, as it makes
 # debugging things tough
 delete $deplist->{Attr};
