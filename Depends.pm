@@ -27,7 +27,7 @@ action
 test_dep
 );
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use Carp;
 use Decision::Depends::OO;
@@ -481,7 +481,8 @@ The available attributes are
 =item File
 
 The name of a file which contains (or will contain) dependency
-information.
+information.  In general this should be an absolute path, unless
+the directory will not be changed.
 
 =item Force
 

@@ -1,5 +1,9 @@
 Revision history for Perl extension Decision::Depends.
 
+0.14  Wed Jan 22 00:17:32 EST 2003
+        - AutoSave option was undocumented and no longer needed.
+	- Added warning about absolute path for dependency file to docs.
+
 0.13  Tue Jan 21 13:54:33 EST 2003
         - needed to bump up Carp::CarpLevel at the Depends.pm level.
 

@@ -20,7 +20,6 @@ sub new
 			DumpFiles => 0,
 			Pretend => 0,
 			Verbose => 0,
-			AutoSave => 1,
 			Force => 0,
 			File => undef
 		      },
@@ -40,11 +39,6 @@ sub new
   $self->LoadState( );
 
   $self;
-}
-
-sub DESTROY
-{
-  $_[0]->SaveState if $_[0]->{Attr}{AutoSave};
 }
 
 sub SetAttr

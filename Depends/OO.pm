@@ -25,7 +25,6 @@ sub new
 			 DumpFiles => 0,
 			 Pretend => 0,
 			 Verbose => 0,
-			 AutoSave => 1,
 			 Force => 0,
 			 File => undef
 		       }
