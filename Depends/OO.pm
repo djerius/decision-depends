@@ -39,6 +39,16 @@ sub new
   $self;
 }
 
+sub Verbose
+{
+  $_[0]->{State}->Verbose;
+}
+
+sub Pretend
+{
+  $_[0]->{State}->Pretend;
+}
+
 sub configure
 {
   my $self = shift;
@@ -93,7 +103,7 @@ sub if_dep
 
   my ( $args, $run ) = @_;
 
-  print STDERR "\nNew dependency\n" if $self->{Attr}{Verbose};
+  print STDERR "\nNew dependency\n" if $self->Verbose;
 
   my @specs = $self->_build_spec_list( undef, undef, $args );
 
@@ -105,8 +115,8 @@ sub if_dep
   {
     # clean up beforehand in case of Pretend
     undef $@;
-    print STDERR "Action required.\n" if $self->{Attr}{Verbose};
-    eval { &$run( $depends) } unless $self->{Attr}{Pretend};
+    print STDERR "Action required.\n" if $self->Verbose;
+    eval { &$run( $depends) } unless $self->Pretend;
     if ( $@ )
     {
       croak $@ unless defined wantarray;
@@ -119,7 +129,7 @@ sub if_dep
   }
   else
   {
-    print STDERR "No action required.\n" if $self->{Attr}{Verbose};
+    print STDERR "No action required.\n" if $self->Verbose;
   }
   1;
 }
@@ -129,7 +139,7 @@ sub test_dep
   my $self = shift;
   my ( @args ) = @_;
 
-  print STDERR "\nNew dependency\n" if $self->{Attr}{Verbose};
+  print STDERR "\nNew dependency\n" if $self->Verbose;
 
   my @specs = $self->_build_spec_list( undef, undef, \@args );
 

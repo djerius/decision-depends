@@ -30,7 +30,7 @@ sub new
 
 sub Verbose
 {
-  $_[0]->{state}{Verbose};
+  $_[0]->{state}->Verbose;
 }
 
 sub add
