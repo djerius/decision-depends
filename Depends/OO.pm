@@ -235,8 +235,7 @@ sub _traverse_spec_list
   # two phases; first the targets, then the dependencies.
   # the targets are identified as id 0.X
 
-  my $deplist = Depends::List->new( $self->{State},
-				  { Verbose => $self->{Attr}{Verbose} } );
+  my $deplist = Depends::List->new( $self->{State} );
 
   my @targets;
 

@@ -22,7 +22,6 @@ sub new
   my $self = bless {}, $class;
 
   $self->{state} = shift;
-  $self->{Attr} = shift || { Verbose => 0 };
 
   $self->{list} = [];
 
@@ -31,7 +30,7 @@ sub new
 
 sub Verbose
 {
-  $_[0]->{Attr}{Verbose};
+  $_[0]->{state}{Verbose};
 }
 
 sub add
@@ -50,15 +49,13 @@ sub depends
 {
   my ( $self, $targets ) = @_;
 
-  my $state = $self->{state};
-
   my %depends;
   local $Carp::CarpLevel = $Carp::CarpLevel + 1;
 
   for my $target ( @$targets )
   {
     print STDERR "  Target ", $target->file, "\n"
-      if $state->Verbose;
+      if $self->Verbose;
 
     # keep track of changed dependencies
     my %deps = ( time => [],

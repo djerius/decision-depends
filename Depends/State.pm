@@ -119,6 +119,11 @@ sub Verbose
   $_[0]->{Attr}{Verbose};
 }
 
+sub Force
+{
+  $_[0]->{Attr}{Force};
+}
+
 sub Pretend
 {
   $_[0]->{Attr}{Pretend};

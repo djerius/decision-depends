@@ -70,7 +70,7 @@ sub depends
 
     my $is_not_equal = 
       ( exists $self->{attr}{force} ? 
-	$self->{attr}{force} : $state->{Attr}{Force} )
+	$self->{attr}{force} : $state->Force )
 	|| $dtime > $time;
 
     # if time of dependency is greater than of target, it's younger

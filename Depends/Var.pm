@@ -8,11 +8,16 @@ use Carp;
 
 our $VERSION = '0.01';
 
+# regular expression for a floating point number
+our $RE_Float = qr/^[+-]?(\d+[.]?\d*|[.]\d+)([dDeE][+-]?\d+)?$/;
+
 our %attr = ( depend => 1,
 	      depends => 1,
 	      force => 1,
 	      var => 1,
 	      case => 1,
+	      numcmp => undef,
+	      strcmp => undef,
 	      no_case => 1,
 	    );
 
@@ -35,6 +40,10 @@ sub new
 	 ": must specify a variable name for `$self->{val}'" )
     unless @notok == 1;
 
+  croak( __PACKAGE__,
+	 ": specify only one of the attributes `-numcmp' or `-strcmp'" )
+    if exists $self->{attr}{numcmp} && exists $self->{attr}{strcmp};
+
   $self->{attr}{var} = $notok[0];
 
   bless $self, $class;
@@ -46,7 +55,9 @@ sub depends
 
   my $var = $self->{attr}{var};
 
-  my $prev_val = $self->{state}->getVar( $target, $var );
+  my $state = $self->{state};
+
+  my $prev_val = $state->getVar( $target, $var );
 
   my @deps = ();
 
@@ -54,39 +65,74 @@ sub depends
   {
     my $is_not_equal = 
       ( exists $self->{attr}{force} ? 
-	$self->{attr}{force} : $self->{state}{Attr}{Force} ) ||
-	cmpVar( exists $self->{attr}{case}, $prev_val, $self->{val} );
+	$self->{attr}{force} : $state->Force ) ||
+	cmpVar( exists $self->{attr}{case}, 
+		$self->{attr}{numcmp}, 
+		$self->{attr}{strcmp}, 
+		$prev_val, $self->{val} );
 
     if ( $is_not_equal )
     {
       print STDERR 
 	"    variable `", $var, "' is now (", $self->{val},
 	"), was ($prev_val)\n"
-	  if $self->{state}->Verbose;
+	  if $state->Verbose;
 
       push @deps, $var;
     }
     else
     {
       print STDERR "    variable `", $var, "' is unchanged\n"
-	if $self->{state}->Verbose;
+	if $state->Verbose;
     }
   }
   else
   {
     print STDERR "    No value on file for variable `", $var, "'\n"
-	if $self->{state}->Verbose;
+	if $state->Verbose;
       push @deps, $var;
   }
 
   var => \@deps;
 }
 
-sub cmpVar
+sub cmp_strVar
 {
   my ( $case, $var1, $var2 ) = @_;
-
+  
   ( $case ? uc($var1) ne uc($var2) : $var1 ne $var2 );
+}
+
+sub cmp_numVar
+{
+  my ( $var1, $var2 ) = @_;
+  
+  $var1 != $var2;
+}
+
+sub cmpVar
+{
+  my ( $case, $num, $str, $var1, $var2 ) = @_;
+
+  if ( defined $num && $num )
+  {
+    cmp_numVar( $var1, $var2 );
+  }
+
+  elsif ( defined $str && $str )
+  {
+    cmp_strVar( $case, $var1, $var2 );
+  } 
+
+  elsif ( $var1 =~ /$RE_Float/o && $var2 =~ /$RE_Float/o) 
+  {
+    cmp_numVar( $var1, $var2 );
+  }
+
+  else
+  {
+    cmp_strVar( $case, $var1, $var2 );
+  }
 }
 
 sub update

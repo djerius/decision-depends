@@ -36,38 +36,40 @@ sub depends
 {
   my ( $self, $target, $time ) = @_;
 
+  my $state = $self->{state};
+
   croak( __PACKAGE__, 
 	 "->depends: non-existant signature file `$self->{val}'" )
     unless -f $self->{val};
 
   my @deps = ();
 
-  my $prev_val = $self->{state}->getSig( $target, $self->{val} );
+  my $prev_val = $state->getSig( $target, $self->{val} );
 
   if ( defined $prev_val )
   {
     my $is_not_equal = 
       ( exists $self->{attr}{force} ?  
-	$self->{attr}{force} : $self->{state}{Attr}{Force} ) ||
+	$self->{attr}{force} : $state->Force ) ||
 	cmpSig( $prev_val, mkSig( $self->{val} ) );
 
     if ( $is_not_equal )
     {
       print STDERR "    signature file `", $self->{val}, "' has changed\n"
-	if $self->{state}->Verbose;
+	if $state->Verbose;
       push @deps, $self->{val};
     }
     else
     {
       print STDERR "    signature file `", $self->{val}, "' is unchanged\n"
-	if $self->{state}->Verbose;
+	if $state->Verbose;
     }
 
   }
   else
   {
     print STDERR "    No signature on file for `", $self->{val}, "'\n"
-	if $self->{state}->Verbose;
+	if $state->Verbose;
       push @deps, $self->{val};
   }
 
