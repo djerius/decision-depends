@@ -1,5 +1,6 @@
 sub cleanup
 {
+  Depends::renew;
   system( q{ rm -f data/targ[0-9]* data/dep[0-9]* data/sig[0-9]* data/deps* } );
 
 #  unlink

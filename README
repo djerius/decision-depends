@@ -1,5 +1,5 @@
 			 ====================
-			 Depends Version 0.05
+			 Depends Version 0.09
 			 ====================
 
 
@@ -35,23 +35,6 @@ INSTALLATION
 CHANGES
 
     Major changes only. See the Changes file for more details.
-
-    0.05
-    ----
-    - Depends::init superceded by Depends::Configure.
-
-    - added Force and -force global and local attributes to force
-      dependencies to be out of date.
-
-
-    0.04
-    ----
-    - added test_dep()
-
-    0.02
-    ----
-    - uses YAML instead of Data::Denter.  Dependency files
-      written by 0.01 cannot be read and will cause a runtime error.
 
 
 COPYRIGHT

@@ -10,7 +10,7 @@ use Depends::Var;
 require 't/common.pl';
 require 't/depends.pl';
 
-our $verbose = 1;
+our $verbose = 0;
 
 our ( %deps );
 

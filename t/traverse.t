@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More;
+plan(  tests => 5 );
 use YAML qw( StoreFile LoadFile );
 
 our $verbose = 0;
@@ -46,13 +47,11 @@ my ( $deplist, $targets ) =
 	 -sig => 'frank',
 	);
 
-cleanup();
-
 if ( $create )
 {
   delete $deplist->{Attr};
   delete $targets->{Attr};
-  delete $Depends::self->{State}->{Attr};
+  delete $Depends::self->{State}{Attr};
   StoreFile( 'data/traverse', $deplist, $targets, $Depends::self->{State} );
 }
 
@@ -62,7 +61,7 @@ my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );
 # debugging things tough
 delete $deplist->{Attr};
 delete $targets->{Attr};
-delete $Depends::self->{State}->{Attr};
+delete $Depends::self->{State}{Attr};
 
 ok( eq_hash( $c_deplist, $deplist ), "Dependency list" );
 ok( eq_array( $c_targets, $targets ), "Targets" );
