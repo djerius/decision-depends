@@ -70,7 +70,7 @@ sub LoadState
   $self->{File} = $file;
 
   my $state = YAML::LoadFile($self->{File})
-      if defined && -f $self->{File};
+      if defined $self->{File} && -f $self->{File};
   $self->{Sig} = $state->{Sig};
   $self->{Var} = $state->{Var};
   $self->{Files} = $state->{Files}; 
