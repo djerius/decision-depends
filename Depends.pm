@@ -27,7 +27,7 @@ action
 test_dep
 );
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use Carp;
 use Depends::OO;
@@ -61,6 +61,12 @@ sub init
   print STDERR "Depends::init is obsolete.  Please use Depends::Configure instead\n";
 
   Configure( { File => $state_file, $attr ? %$attr : () } );
+}
+
+sub renew
+{
+  undef $self;
+  $self = Depends::OO->new();
 }
 
 1;
@@ -273,6 +279,31 @@ is provided as if it were another attribute:
 
 Variables cannot have the same name as any of the reserved names for
 attributes.
+
+Variable dependencies may have the following additional attributes:
+
+=over 8
+
+=item C<-case>
+
+If specified, variable value comparisons will be case sensitive.  They
+are normally not case sensitive.
+
+=item C<-numcmp>
+
+If specified, treat the value as a number (integer or floating point).
+Generally B<Depends> does a good job at guessing whether a value is a
+number or not; this forces it to treat it as a number if it guesses
+wrong.  This may not be mixed with the B<-str> attribute.
+
+=item C<-strcmp>
+
+If specified, treat the value as a string.  Generally B<Depends> does
+a good job at guessing whether a value is a number or not; this forces
+it to treat it as a string if it guesses wrong.  This may not be mixed
+with the B<-str> attribute.
+
+=back
 
 =back
 
