@@ -1,5 +1,22 @@
 Revision history for Perl extension Depends.
 
+0.05  Mon Mar 25 13:22:33 EST 2002
+
+        - first recasting of top level Depends interface into OO
+          module by moving most of the front end code into Depends::OO.
+          Depends.pm now is just a wrapper around Depends::OO.
+
+	- Depends::init superceded by Depends::Configure.
+
+	- added Force and -force global and local attributes to force
+	  dependencies to be out of date.
+
+	- no longer use File::stat, as it causes conniptions for
+	  testing under 5.6.1.
+
+0.04  Thu Mar 21 19:48:11 EST 2002
+        - added test_dep()
+
 0.03  Thu Mar  7 16:45:04 EST 2002
         - further message tweaks.
 	- Verbose > 4 gives object creation messages.

@@ -1,6 +1,7 @@
 Changes
 Depends.pm
 Depends/List.pm
+Depends/OO.pm
 Depends/Sig.pm
 Depends/State.pm
 Depends/Target.pm
@@ -13,7 +14,6 @@ README
 data/deps
 data/parse
 data/traverse
-t/bogus.t
 t/common.pl
 t/depends.pl
 t/depends.t
@@ -23,5 +23,6 @@ t/pretend.t
 t/sfile.t
 t/sig.t
 t/time.t
+t/time_test_dep.t
 t/traverse.t
 t/var.t

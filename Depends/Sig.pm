@@ -11,6 +11,7 @@ our $VERSION = '0.01';
 
 our %attr = ( depend => 1,
 	      depends => 1,
+	      force => 1,
 	      sig => 1 );
 
 sub new
@@ -43,20 +44,24 @@ sub depends
 
   my $prev_val = $self->{state}->getSig( $target, $self->{val} );
 
+  $DB::single=1;
   if ( defined $prev_val )
   {
-    my $is_equal = cmpSig( $prev_val, mkSig( $self->{val} ) );
+    my $is_not_equal = 
+      ( exists $self->{attr}{force} ?  
+	$self->{attr}{force} : $self->{state}{Attr}{Force} ) ||
+	cmpSig( $prev_val, mkSig( $self->{val} ) );
 
-    if ( $is_equal )
-    {
-      print STDERR "    signature file `", $self->{val}, "' is unchanged\n"
-	if $self->{state}->Verbose;
-    }
-    else
+    if ( $is_not_equal )
     {
       print STDERR "    signature file `", $self->{val}, "' has changed\n"
 	if $self->{state}->Verbose;
       push @deps, $self->{val};
+    }
+    else
+    {
+      print STDERR "    signature file `", $self->{val}, "' is unchanged\n"
+	if $self->{state}->Verbose;
     }
 
   }
@@ -73,7 +78,7 @@ sub depends
 
 sub cmpSig
 {
-  $_[0] eq $_[1];
+  $_[0] ne $_[1];
 }
 
 sub mkSig

@@ -24,229 +24,43 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 if_dep
 action
+test_dep
 );
 
-our $VERSION = '0.03';
+our $VERSION = '0.05';
 
 use Carp;
-use Depends::State;
-use Depends::List;
-use Depends::Target;
+use Depends::OO;
 
-# regular expression for a floating point number
-our $RE_Float = qr/^[+-]?(\d+[.]?\d*|[.]\d+)([dDeE][+-]?\d+)?$/;
-
-# this keeps track of all saveable state, as well as stuff when
-# we're just Pretending
-
-our $State = Depends::State->new( );
+our $self = Depends::OO->new();
 
 sub if_dep(&@)
 {
   my ( $deps, $run ) = @_;
-
-  croak( __PACKAGE__, 
-	 '::if_dep: ', __PACKAGE__, "::init must be called first\n" )
-	unless defined $State;
-
-  print STDERR "\nNew dependency\n" if $State->Verbose;
-
   my @args = &$deps;
 
-  my @specs = build_spec_list( undef, undef, \@args );
-
-  my ( $deplist, $targets ) = traverse_spec_list( @specs );
-
-  my $depends = depends( $deplist, $targets );
-
-  if ( keys %$depends )
-  {
-    # clean up beforehand in case of Pretend
-    undef $@;
-    print STDERR "Action required.\n" if $State->Verbose;
-    eval { &$run( $depends) } unless $State->Pretend;
-    if ( $@ )
-    {
-      croak $@ unless defined wantarray;
-      return 0;
-    }
-    else
-    {
-      update( $deplist, $targets );
-    }
-  }
-  else
-  {
-    print STDERR "No action required.\n" if $State->Verbose;
-  }
-  1;
+  $self->if_dep( \@args, $run );
 }
 
 sub action(&) { $_[0] }
+
+sub test_dep
+{
+  $self->test_dep( @_ );
+}
+
+sub Configure
+{
+  $self->configure( @_ );
+}
 
 sub init
 {
   my ( $state_file, $attr ) = @_;
 
-  $State->LoadState( $state_file );
-  $State->SetAttr( $attr );
-}
+  print STDERR "Depends::init is obsolete.  Please use Depends::Configure instead\n";
 
-
-# spec format is 
-
-# -attr1 => -attr2 => value1, ...
-# where value may be of the form 
-#  [ -attr3 => -attr4 => value2 ]
-#  attr1 and attr2 are attached to value2
-# attributes may have values, 
-#   '-attr=attr_value'
-# by default the value is 1
-# to undefine an attribute:
-#  -no_attr
-# additionally, each value is given an attribute "id" representing its
-# position in the list (independent of attributes) and in any sublists. 
-# id = [0], [0,0], [0,1,1], etc.
-
-sub build_spec_list
-{
-  my ( $attrs, $levels, $specs ) = @_;
-
-  $attrs = [ {} ] unless defined $attrs;
-  $levels = [ -1 ] unless defined $levels;
-
-  my @res;
-
-  # process target attributes
-  foreach my $spec ( @$specs )
-  {
-    my $ref = ref $spec;
-    # if it's an attribute, process it
-    if ( ! $ref && $spec !~ /$RE_Float/ && 
-	 $spec =~ /^-(no_)?(\w+)(?:\s*=\s*(.*))?/ )
-    {
-      if ( defined $1 )
-      {
-	$attrs->[-1]{$2} = undef;
-      }
-      else
-      {
-	$attrs->[-1]{$2} = defined $3 ? $3 : 1;
-      }
-    }
-
-    # maybe a nested level?
-    elsif ( 'ARRAY' eq $ref )
-    {
-      push @$attrs, {};
-      $levels->[-1]++;
-      push @$levels, -1;
-      push @res, build_spec_list( $attrs, $levels, $spec );
-      pop @$attrs;
-      pop @$levels;
-
-      # reset attributes
-      $attrs->[-1] = {};
-    }
-
-    # a value
-    elsif ( 'SCALAR' eq $ref || ! $ref )
-    {
-      $spec = $$spec if $ref;
-
-      $levels->[-1]++;
-      my %attr;
-      foreach my $lattr ( @$attrs )
-      {
-	my ( $key, $val );
-	$attr{$key} = $val while ( ($key,$val) = each %$lattr );
-      }
-      delete @attr{ grep { ! defined $attr{$_} } keys %attr };
-      push @res, { id => [ @$levels ], 
-		   val => $spec , 
-		   attr => \%attr };
-
-      # reset attributes
-      $attrs->[-1] = {};
-    }
-
-  }
-
-  @res;
-}
-
-
-sub traverse_spec_list
-{
-  my @list = @_;
-
-  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
-
-  # two phases; first the targets, then the dependencies.
-  # the targets are identified as id 0.X
-
-  my $deplist = Depends::List->new( $State,
-				  { Verbose => $State->Verbose } );
-
-  my @targets;
-
-  eval {
-
-    for my $spec ( @list )
-    {
-      if ( (grep { exists $spec->{attr}{$_} } qw( target targets sfile slink )) ||
-	   (! exists $spec->{attr}{depend} && 0 == $spec->{id}[0] ) )
-      {
-	push @targets, Depends::Target->new( $State, $spec );
-      }
-
-      elsif ( my @match = grep { defined $spec->{attr}{$_} } qw( sig var ) )
-      {
-	if ( @match > 1 )
-	{
-	  $Carp::CarpLevel--;
-	  croak( __PACKAGE__, 
-		 "::traverse_spec_list: too many classes for `$spec->{val}'" )
-	}
-
-	$deplist->create( $match[0], $spec );
-      }
-      else
-      {
-	$deplist->create( Time => $spec );
-      }
-
-    }
-  };
-    croak( $@ ) if $@;
-
-  croak( __PACKAGE__, '::traverse_spec_list: no targets?' )
-    unless @targets;
-
-  # should we require dependencies?
-  #  croak( __PACKAGE__, '::traverse_spec_list: no dependencies?' )
-  #    unless $deplist->ndeps;
-
-  ( $deplist, \@targets );
-}
-
-sub depends
-{
-  my ( $deplist, $targets ) = @_;
-
-  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
-  $deplist->depends( $targets );
-}
-
-sub update
-{
-  my ( $deplist, $targets ) = @_;
-
-  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
-
-  $deplist->update( $targets );
-
-  $_->update foreach @$targets;
+  Configure( { File => $state_file, $attr ? %$attr : () } );
 }
 
 1;
@@ -262,7 +76,7 @@ Depends - Track dependencies
 
   use Depends;
 
-  Depends::init( $depfile );
+  Depends::Configure( { File => $depfile } );
   if_dep { @targ_dep_list } 
      action { action };
 
@@ -297,7 +111,7 @@ value has changed since the product was last created.
 B<Depends> must keep some dependency information between runs (for
 signature and variable dependencies). It stores this in a file,
 which must be named by the application.  The application indicates
-the file by calling the B<Depends::init> subroutine.
+the file by calling the B<Depends::Configure> subroutine.
 
 This file is updated after completion of successful actions and
 when the program is exited.
@@ -307,12 +121,14 @@ when the program is exited.
 B<Depends> can be put into a state where it checks dependencies
 and pretends to update targets in order to check what actions might
 need to be taken.  This is done by passing the C<Pretend> attribute
-to B<Depends::init>.  In this mode no actions are actually performed,
+to B<Depends::Configure>.  In this mode no actions are actually performed,
 but are assumed to have successfully created their products.
 
 B<Depends> will output to STDERR its musings if the C<Verbose>
-attribute is passed to B<Depends::init>.
+attribute is passed to B<Depends::Configure>.
 
+To simply test if a dependency exists, without requiring that
+an action be performed, use the B<test_dep> function.
 
 
 =head2 Targets and Dependencies List
@@ -460,6 +276,26 @@ attributes.
 
 =back
 
+Dependencies may be given special attributes independent of the type
+of dependency.  These are:
+
+=over 8
+
+=item C<-force>
+
+If set to non-zero (the default if no value is specified), this will
+force the dependency to always be out-of-date.  This can be used to
+override a global forcing of dependencies (done via the B<Depend::Configure>
+function) by setting it to zero.  For example:
+
+  Depends::Configure( { Force => 1 } );
+  if_dep { -target => $target,
+           -depend => '-force=0' => $dep }
+  action { ... }
+
+
+=back
+
 =head2 Action specification
 
 B<Depends> exports the function B<if_dep>, which is used by the
@@ -548,13 +384,36 @@ The following two examples have the same result:
   if_dep { ... } action { ... } or die $@;
 
 
+=head2 Testing for a dependency
+
+Sometimes life is so complicated that you need to first test for
+a dependency before you know what to do.  In that case, use the
+B<test_dep> function, which has the form
+
+  test_dep( targdep )
+
+where I<targdep> is identical to that passed to the B<if_dep>
+function.  In a scalar environment, B<test_dep> will return true if
+the dependency is not met.  In a list environment, it will return a
+hash (not a hashref) with the dependency information (the same hash as
+passed to the B<action> routine, but here it's a hash, not a hash
+ref).  For example:
+
+  if ( test_dep( @targdep ) )
+  {
+    # dependency was not met
+  }
+
+  %deps = test_dep( @targdep );
+
+
 =head1 Subroutines
 
 =over 8
 
-=item Depends::init
+=item Depends::Configure
 
-  Depends::init( $depfile, \%attr )
+  Depends::Configure( \%attr )
 
 This routine sets the file to which B<Depends> writes its dependency
 information, as well as various attributes to control B<Depends>
@@ -562,16 +421,22 @@ behavior.
 
 A dependency file is not required if there are no signature or
 variable dependencies.  In that case, if no attributes need be set,
-this routine need not be called at all.  However, if attributes must
-be set and no dependency file is required, pass in the undefined value
-for the file name.
-
-  Depends::init( undef, \%attr );
+this routine need not be called at all. 
 
 The attributes are passed via a hash, with the following recognized
 keys:
 
 =over 8
+
+=item File
+
+The name of a file which contains (or will contain) dependency
+information.
+
+=item Force
+
+If set to a non-zero value, all dependencies will be out-of-date,
+forcing execution of all actions.
 
 =item Pretend
 
@@ -586,7 +451,7 @@ If set to a non-zero value, B<Depends> will be somewhat verbose.
 
 For example,
 
-  Depends::init( $depfile, { Pretend => 1, Verbose => 1 } );
+  Depends::Configure( { File => $depfile Pretend => 1, Verbose => 1 } );
 
 
 =back
@@ -595,7 +460,7 @@ For example,
 =head1 EXPORT
 
 The following routines are exported into the caller's namespace
-B<if_dep>, B<action>.
+B<if_dep>, B<action>, B<test_dep>.
 
 =head1 NOTES
 
@@ -619,6 +484,6 @@ may find a copy at
 
 =head1 AUTHOR
 
-Diab Jerius (djerius@cfa.harvard.edu)
+Diab Jerius (djerius@cpan.org)
 
 =cut

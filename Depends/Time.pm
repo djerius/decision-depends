@@ -5,12 +5,12 @@ use strict;
 use warnings;
 
 use Carp;
-use File::stat;
 
 our $VERSION = '0.01';
 
 our %attr = ( depend => 1,
 	      depends => 1,
+	      force => 1,
 	      time => 1,
 	      orig => 1 );
 
@@ -58,18 +58,23 @@ sub depends
     my $deptag = $dep;
     $deptag .= " (slinked to `$depfile')" if $links;
 
-    my $sb;
+    my @sb;
     my $dtime = 
-      $self->{state}->getTime( $dep ) || 
-	($sb = stat( $dep ) and $sb->mtime);
+      $state->getTime( $dep ) ||
+	((@sb = stat( $dep )) ? $sb[9] : undef);
 
     croak( __PACKAGE__, "->cmp: non-existant dependency: $dep" )
       unless defined $dtime;
 
     $state->setTime( $dep, $dtime );
 
+    my $is_not_equal = 
+      ( exists $self->{attr}{force} ? 
+	$self->{attr}{force} : $state->{Attr}{Force} )
+	|| $dtime > $time;
+
     # if time of dependency is greater than of target, it's younger
-    if ( $dtime > $time )
+    if ( $is_not_equal )
     {
       print STDERR "    file `$deptag' is younger\n" if $state->Verbose;
       push @deps, $dep;

@@ -20,7 +20,9 @@ sub new
 			DumpFiles => 0,
 			Pretend => 0,
 			Verbose => 0,
-			AutoSave => 1
+			AutoSave => 1,
+			Force => 0,
+			File => undef
 		      },
 	      SLink => {},
 	      Files => {},
@@ -35,7 +37,7 @@ sub new
   my ( $file ) = @_;
 
   $self->SetAttr( $attr );
-  $self->LoadState( $file );
+  $self->LoadState( );
 
   $self;
 }
@@ -54,35 +56,39 @@ sub SetAttr
   croak( __PACKAGE__, '->SetAttr: attribute not a hash ref')
 	 unless 'HASH' eq ref $attr;
 
-  my @notok = grep { ! exists $self->{Attr}{$_} } keys %$attr;
+    my @notok = grep { ! exists $self->{Attr}{$_} } keys %$attr;
   croak( __PACKAGE__, '->SetAttr: unknown attribute(s): ',
 	 join( ', ', @notok) ) if @notok;
 
   my ($key, $val);
   $self->{Attr}{$key} = $val while( ($key, $val) = each %$attr );
   $self->{Attr}{Cache} = 1 if $self->{Attr}{Pretend};
+
+  $self->LoadState() if exists $attr->{File};
 }
 
 sub LoadState
 {
-  my ( $self, $file ) = @_;
+  my ( $self ) = @_;
 
-  $self->{File} = $file;
+  my $file = $self->{Attr}{File};
 
-  my $state = YAML::LoadFile($self->{File})
-      if defined $self->{File} && -f $self->{File};
+  my $state = YAML::LoadFile($file)
+      if defined $file && -f $file;
+
+  $self->{SLink} = {};
   $self->{Sig} = $state->{Sig};
   $self->{Var} = $state->{Var};
-  $self->{Files} = $state->{Files}; 
+  $self->{Files} = $state->{Files};
 }
 
 sub SaveState
 {
   my $self = shift;
 
-  return if $self->{Attr}{Pretend} || !defined $self->{File};
+  return if $self->{Attr}{Pretend} || !defined $self->{Attr}{File};
 
-  YAML::StoreFile( $self->{File},
+  YAML::StoreFile( $self->{Attr}{File},
 		   { 
 		    Sig => $self->{Sig}, 
 		    Var => $self->{Var}, 
@@ -90,7 +96,15 @@ sub SaveState
 		      ( $self->{Attr}{DumpFiles} ? $self->{Files} : {} ) 
 		   } )
     or croak( __PACKAGE__, 
-	      "->SaveState: error writing state to $self->{File}" );
+	      "->SaveState: error writing state to $self->{Attr}{File}" );
+}
+
+sub EraseState
+{
+  my $self = shift;
+
+  $self->{$_} = {} foreach qw( SLink Files Sig Var );
+
 }
 
 sub DumpAll

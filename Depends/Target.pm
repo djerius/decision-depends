@@ -4,7 +4,6 @@ require 5.005_62;
 use strict;
 use warnings;
 
-use File::stat;
 use Carp;
 
 our $VERSION = '0.01';
@@ -41,10 +40,10 @@ sub getTime
   my $self = shift;
   my $file = $self->{val};
 
-  my $sb;
+  my @sb;
   my $time = 
     $self->{state}->getTime( $file )
-      || (($sb = stat( $file )) and $sb->mtime);
+      || ((@sb = stat( $file )) ? $sb[9] : undef);
 
   # cache the value
   $self->{state}->setTime( $file, $time )
@@ -56,12 +55,15 @@ sub getTime
 sub setTime
 {
   my $self = shift;
-  my $sb;
+  my @sb;
   my $file = $self->{val};
+
+  $DB::single=1;
   my $time = $self->{Pretend} ?
-                  time () : ($sb = stat( $file ) and $sb->mtime);
+                  time () : ((@sb = stat( $file )) ? $sb[9] : undef);
+
   croak( __PACKAGE__, 
-	 "->update: couldn't get time for `$file'. does it exist?" )
+	 "->setTime: couldn't get time for `$file'. does it exist?" )
     unless defined $time;
 
   $self->{state}->setTime( $file, $time );

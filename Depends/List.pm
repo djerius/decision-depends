@@ -34,21 +34,11 @@ sub Verbose
   $_[0]->{Attr}{Verbose};
 }
 
-sub create
+sub add
 {
-  my $self = shift;
-  my $type = shift;
+  my ( $self, $obj ) = @_;
 
-  $type = lc $type;
-
- ( my $class = __PACKAGE__) =~ s/\w+$/\u$type/;
-
-
-  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
-  push @{$self->{list}}, $class->new( $self->{state}, @_ );
-
-  print STDERR "Creating $class (", $self->{list}[-1]->pprint, ")\n"
-    if $self->Verbose && $self->Verbose > 4;
+  push @{$self->{list}}, $obj;
 }
 
 sub ndeps

@@ -10,6 +10,7 @@ our $VERSION = '0.01';
 
 our %attr = ( depend => 1,
 	      depends => 1,
+	      force => 1,
 	      var => 1,
 	      case => 1,
 	      no_case => 1,
@@ -51,22 +52,24 @@ sub depends
 
   if ( defined $prev_val )
   {
-    my $is_equal = 
-      cmpVar( exists $self->{attr}{case}, $prev_val, $self->{val} );
+    my $is_not_equal = 
+      ( exists $self->{attr}{force} ? 
+	$self->{attr}{force} : $self->{state}{Attr}{Force} ) ||
+	cmpVar( exists $self->{attr}{case}, $prev_val, $self->{val} );
 
-    if ( $is_equal )
-    {
-      print STDERR "    variable `", $var, "' is unchanged\n"
-	if $self->{state}->Verbose;
-    }
-    else
+    if ( $is_not_equal )
     {
       print STDERR 
 	"    variable `", $var, "' is now (", $self->{val},
 	"), was ($prev_val)\n"
 	  if $self->{state}->Verbose;
-      
-      push @deps, $var unless $is_equal;
+
+      push @deps, $var;
+    }
+    else
+    {
+      print STDERR "    variable `", $var, "' is unchanged\n"
+	if $self->{state}->Verbose;
     }
   }
   else
@@ -83,7 +86,7 @@ sub cmpVar
 {
   my ( $case, $var1, $var2 ) = @_;
 
-  ( $case ? uc($var1) eq uc($var2) : $var1 eq $var2 );
+  ( $case ? uc($var1) ne uc($var2) : $var1 ne $var2 );
 }
 
 sub update
