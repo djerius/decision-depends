@@ -213,8 +213,6 @@ sub _build_spec_list
     # a value
     elsif ( 'SCALAR' eq $ref || ! $ref )
     {
-      $DB::single=1;
-
       $spec = $$spec if $ref;
 
       $levels->[-1]++;
