@@ -1,0 +1,81 @@
+%Depends::List
+    list => @
+        %Depends::Time
+            attr => %
+                depend => 1
+            id => @
+                3
+                0
+            state => %Depends::State(REF00001)
+                File => ?
+                Files => %
+                SLink => %
+                Sig => %
+                Var => %
+            val => data/dep1
+        %Depends::Time
+            attr => %
+                depend => 1
+            id => @
+                3
+                1
+            state => %Depends::State(*REF00001-1)
+            val => data/dep2
+        %Depends::Var
+            attr => %
+                case => 1
+                foobar => 1
+                var => foobar
+            id => @
+                4
+                0
+            state => %Depends::State(*REF00001-2)
+            val => value
+        %Depends::Sig
+            attr => %
+                sig => 1
+            id => @
+                5
+            state => %Depends::State(*REF00001-3)
+            val => frank
+    state => %Depends::State(*REF00001-4)
+@
+    %Depends::Target
+        Pretend => 0
+        attr => %
+            target => 1
+        id => @
+            0
+            0
+        state => %Depends::State(*REF00001-5)
+        val => targ1
+    %Depends::Target
+        Pretend => 0
+        attr => %
+            target => 1
+        id => @
+            0
+            1
+        state => %Depends::State(*REF00001-6)
+        val => targ2
+    %Depends::Target
+        Pretend => 0
+        attr => %
+            sfile => 1
+            target => 1
+        id => @
+            1
+            0
+        state => %Depends::State(*REF00001-7)
+        val => targ3
+    %Depends::Target
+        Pretend => 0
+        attr => %
+            slink => dep1
+            target => 1
+        id => @
+            2
+            0
+        state => %Depends::State(*REF00001-8)
+        val => targ4
+%Depends::State(*REF00001-9)

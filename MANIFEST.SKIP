@@ -1,0 +1,12 @@
+\bRCS\b
+^MANIFEST\.
+^INSTALL
+^Makefile$
+~$
+\.html$
+\.old$
+^blib/
+^MakeMaker-\d
+CVS/
+^pm_to_blib
+GNUmakefile

@@ -1,0 +1,224 @@
+package Depends::State;
+
+require 5.005_62;
+use strict;
+use warnings;
+
+use Data::Denter;
+use IO::File;
+use Carp;
+
+our $VERSION = '0.01';
+
+sub new
+{
+  my $class = shift;
+  $class = ref($class) || $class;
+
+  my $self = {
+	      Attr => { Cache => 0,
+			DumpFiles => 0,
+			Pretend => 0,
+			Verbose => 0,
+			AutoSave => 1
+		      },
+	      SLink => {},
+	      Files => {},
+	      Sig   => {},
+	      Var   => {},
+	     };
+
+  bless $self, $class;
+
+  my $attr = pop @_ if 'HASH' eq ref $_[-1];
+
+  my ( $file ) = @_;
+
+  $self->SetAttr( $attr );
+  $self->LoadState( $file );
+
+  $self;
+}
+
+sub DESTROY
+{
+  $_[0]->SaveState if $_[0]->{Attr}{AutoSave};
+}
+
+sub SetAttr
+{
+  my ( $self, $attr ) = @_;
+
+  return unless defined $attr;
+
+  croak( __PACKAGE__, '->SetAttr: attribute not a hash ref')
+	 unless 'HASH' eq ref $attr;
+
+  my @notok = grep { ! exists $self->{Attr}{$_} } keys %$attr;
+  croak( __PACKAGE__, '->SetAttr: unknown attribute(s): ',
+	 join( ', ', @notok) ) if @notok;
+
+  my ($key, $val);
+  $self->{Attr}{$key} = $val while( ($key, $val) = each %$attr );
+  $self->{Attr}{Cache} = 1 if $self->{Attr}{Pretend};
+}
+
+sub LoadState
+{
+  my ( $self, $file ) = @_;
+
+  $self->{File} = $file;
+
+  if ( defined $self->{File} and open( DEPS, $self->{File}) )
+  {
+    local $/ = undef;
+    ( $self->{Sig}, $self->{Var}, $self->{Files} ) = Undent(<DEPS>);
+    close( DEPS );
+  }
+}
+
+sub SaveState
+{
+  my $self = shift;
+
+  return if $self->{Attr}{Pretend} || !defined $self->{File};
+
+  open( DEPS, ">$self->{File}" )
+    or croak( __PACKAGE__, "->SaveState: error creating $self->{File}" );
+
+  print DEPS Indent( $self->{Sig}, $self->{Var}, 
+		     ( $self->{Attr}{DumpFiles} ? $self->{Files} : {} ) )
+    or croak( __PACKAGE__, 
+	      "->SaveState: error writing state to $self->{File}" );
+  close DEPS;
+}
+
+sub DumpAll
+{
+  my $self = shift;
+
+  print STDERR Denter $self;
+}
+
+sub Verbose
+{
+  $_[0]->{Attr}{Verbose};
+}
+
+sub Pretend
+{
+  $_[0]->{Attr}{Pretend};
+}
+
+######################################################################
+#  Status Files,
+
+
+sub attachSLink
+{
+  my ( $self, $file, $slink ) = @_;
+
+  $self->{SLink}{$slink} = []
+    unless exists  $self->{SLink}{$slink};
+
+  push @{$self->{SLink}{$slink}}, $file;
+}
+
+sub getSLinks
+{
+  my ( $self, $file ) = @_;
+
+  return exists $self->{SLink}{$file} ? $self->{SLink}{$file} : [$file];
+}
+
+
+######################################################################
+# File/Time routines
+
+sub getTime
+{
+  my ( $self, $file ) = @_;
+
+  exists $self->{Files}{$file} ?  $self->{Files}{$file}{time} : undef;
+}
+
+sub setTime
+{
+  my ( $self, $file, $time ) = @_;
+
+  return unless $self->{Attr}{Cache};
+
+  $self->{Files}{$file}{time} = $time;
+}
+
+
+######################################################################
+# Signature routines
+
+sub getSig
+{
+  my ( $self, $target, $file ) = @_;
+
+  ( exists $self->{Sig}{$target} && exists $self->{Sig}{$target}{$file} )
+     ? $self->{Sig}{$target}{$file} : undef;
+}
+
+sub setSig
+{
+  my ( $self, $target, $file, $sig ) = @_;
+
+  $self->{Sig}{$target}{$file} = $sig;
+  $self->SaveState;
+}
+
+
+######################################################################
+# Variable routines
+
+sub getVar
+{
+  my ( $self, $target, $var ) = @_;
+
+  # return undef if we have no record of this variable
+  exists $self->{Var}{$target}{$var} ? $self->{Var}{$target}{$var} : undef;
+}
+
+
+sub setVar
+{
+  my ( $self, $target, $var, $val ) = @_;
+
+  $self->{Var}{$target}{$var} = $val;
+  $self->SaveState;
+}
+
+1;
+__END__
+# Below is stub documentation for your module. You better edit it!
+
+=head1 NAME
+
+Depends - Perl extension for blah blah blah
+
+=head1 SYNOPSIS
+
+  use Depends::State;
+
+
+=head1 DESCRIPTION
+
+
+=head2 EXPORT
+
+None by default.
+
+
+=head1 AUTHOR
+
+A. U. Thor, a.u.thor@a.galaxy.far.far.away
+
+=head1 SEE ALSO
+
+perl(1).
+
+=cut

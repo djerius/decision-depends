@@ -1,0 +1,6 @@
+Revision history for Perl extension Depends.
+
+0.01  Mon Feb  4 11:26:18 2002
+	- original version; created by h2xs 1.20 with options
+		-n Depends -A -X
+
