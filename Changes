@@ -5,7 +5,7 @@ Revision history for Perl extension Depends.
 	  number and perform a numeric comparison.  This may be
 	  forced or overridden with the new -numcmp and -strcmp attributes.
 	- documented variable dep. -case attribute.
-	- added Depends::renew() for testing purposes.
+	- added Depends::OO::renew() for testing purposes.
 	- removed dependency Attr hashes; they should all use State
 	  Attrs via State methods.
 		
