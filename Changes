@@ -1,10 +1,12 @@
 Revision history for Perl extension Depends.
 
-0.07  Mon Apr  1 10:38:00 EST 2002
+0.07  Mon Apr  1
         - configure is more flexible in regards to the form of its
 	  arguments
 	- OO::new was calling (via configure) $self->{State}->SetAttr
 	  before $self->{State} was created.
+	- Target::mkSFile wasn't correctly updating the modify time
+	  if the sfile already existed.
 
 0.06  Wed Mar 27 20:24:27 EST 2002
         - State->getVar was incorrectly treating variables
