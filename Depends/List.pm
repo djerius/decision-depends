@@ -48,7 +48,7 @@ sub create
   push @{$self->{list}}, $class->new( $self->{state}, @_ );
 
   print STDERR "Creating $class (", $self->{list}[-1]->pprint, ")\n"
-    if $self->Verbose;
+    if $self->Verbose && $self->Verbose > 4;
 }
 
 sub ndeps
@@ -67,8 +67,8 @@ sub depends
 
   for my $target ( @$targets )
   {
-    print STDERR ("Checking target ", $target->file)
-      if $self->Verbose;
+    print STDERR "  Target ", $target->file, "\n"
+      if $state->Verbose;
 
     # keep track of changed dependencies
     my %deps = ( time => [],
@@ -80,13 +80,12 @@ sub depends
 
     unless( defined $time )
     {
-      print STDERR ": doesn't exist\n" if $self->Verbose;
+      print STDERR $target->file, " doesn't exist\n" if $self->Verbose;
+
       $depends{$target->file} = \%deps;
     }
     else
     {
-      print STDERR "\n" if $self->Verbose;
-
       for my $dep ( @{$self->{list}} )
       {
 	my ( $type, $deps ) = $dep->depends( $target->file, $time );

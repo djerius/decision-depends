@@ -55,12 +55,8 @@ sub depends
   # loop through dependencies, check if any is younger than the target
   for my $dep ( @$depfiles )
   {
-    if ( $state->Verbose )
-    {
-      print STDERR "  Comparing $dep";
-      print STDERR " (slinked to $depfile)" if $links;
-      print STDERR "\n";
-    }
+    my $deptag = $dep;
+    $deptag .= " (slinked to `$depfile')" if $links;
 
     my $sb;
     my $dtime = 
@@ -75,12 +71,12 @@ sub depends
     # if time of dependency is greater than of target, it's younger
     if ( $dtime > $time )
     {
-      print STDERR "    $dep is younger than $target\n" if $state->Verbose;
+      print STDERR "    file `$deptag' is younger\n" if $state->Verbose;
       push @deps, $dep;
     }
     else
     {
-      print STDERR "    $dep is older than $target\n" if $state->Verbose;
+      print STDERR "    file `$deptag' is older\n" if $state->Verbose;
     }
   }
 

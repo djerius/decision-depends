@@ -1,5 +1,11 @@
 Revision history for Perl extension Depends.
 
+0.03  Thu Mar  7 16:45:04 EST 2002
+        - further message tweaks.
+	- Verbose > 4 gives object creation messages.
+	- must have broken non-existant signature and variable code,
+	  cause it didn't work.  does now.
+
 0.02  Wed Mar  6 12:07:20 EST 2002
         - uses YAML instead of Data::Denter, as had corruption
 	  problems with the latter

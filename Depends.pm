@@ -26,7 +26,7 @@ if_dep
 action
 );
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use Carp;
 use Depends::State;
@@ -49,6 +49,8 @@ sub if_dep(&@)
 	 '::if_dep: ', __PACKAGE__, "::init must be called first\n" )
 	unless defined $State;
 
+  print STDERR "\nNew dependency\n" if $State->Verbose;
+
   my @args = &$deps;
 
   my @specs = build_spec_list( undef, undef, \@args );
@@ -61,6 +63,7 @@ sub if_dep(&@)
   {
     # clean up beforehand in case of Pretend
     undef $@;
+    print STDERR "Action required.\n" if $State->Verbose;
     eval { &$run( $depends) } unless $State->Pretend;
     if ( $@ )
     {
@@ -71,6 +74,10 @@ sub if_dep(&@)
     {
       update( $deplist, $targets );
     }
+  }
+  else
+  {
+    print STDERR "No action required.\n" if $State->Verbose;
   }
   1;
 }

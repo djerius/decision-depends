@@ -39,15 +39,36 @@ sub depends
 	 "->depends: non-existant signature file `$self->{val}'" )
     unless -f $self->{val};
 
+  my @deps = ();
+
   my $prev_val = $self->{state}->getSig( $target, $self->{val} );
 
+  if ( defined $prev_val )
+  {
+    my $is_equal = cmpSig( $prev_val, mkSig( $self->{val} ) );
 
-  return 
-    sig => 
-      [
-       (defined $prev_val && cmpSig( $prev_val, mkSig( $self->{val} ) ))
-       ? () : $self->{val}
-      ];
+    if ( $is_equal )
+    {
+      print STDERR "    signature file `", $self->{val}, "' is unchanged\n"
+	if $self->{state}->Verbose;
+    }
+    else
+    {
+      print STDERR "    signature file `", $self->{val}, "' has changed\n"
+	if $self->{state}->Verbose;
+      push @deps, $self->{val};
+    }
+
+  }
+  else
+  {
+    print STDERR "    No signature on file for `", $self->{val}, "'\n"
+	if $self->{state}->Verbose;
+      push @deps, $self->{val};
+  }
+
+  sig => \@deps;
+
 }
 
 sub cmpSig

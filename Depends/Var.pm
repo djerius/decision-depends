@@ -43,14 +43,40 @@ sub depends
 {
   my ( $self, $target ) = @_;
 
-  my $prev_val = $self->{state}->getVar( $target, $self->{attr}{var} );
+  my $var = $self->{attr}{var};
 
-  return
-    var => [
-	    defined $prev_val &&
-	    cmpVar( exists $self->{attr}{case}, $prev_val, $self->{val} )
-	    ? () : ( $self->{attr}{var} )
-	   ];
+  my $prev_val = $self->{state}->getVar( $target, $var );
+
+  my @deps = ();
+
+  if ( defined $prev_val )
+  {
+    my $is_equal = 
+      cmpVar( exists $self->{attr}{case}, $prev_val, $self->{val} );
+
+    if ( $is_equal )
+    {
+      print STDERR "    variable `", $var, "' is unchanged\n"
+	if $self->{state}->Verbose;
+    }
+    else
+    {
+      print STDERR 
+	"    variable `", $var, "' is now (", $self->{val},
+	"), was ($prev_val)\n"
+	  if $self->{state}->Verbose;
+      
+      push @deps, $var unless $is_equal;
+    }
+  }
+  else
+  {
+    print STDERR "    No value on file for variable `", $var, "'\n"
+	if $self->{state}->Verbose;
+      push @deps, $var;
+  }
+
+  var => \@deps;
 }
 
 sub cmpVar
