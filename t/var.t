@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test::More;
-plan( tests => 13 );
+plan( tests => 16 );
 
 use Decision::Depends;
 use Decision::Depends::Var;
@@ -14,6 +14,56 @@ our $verbose = 0;
 our $error = 0;
 
 our ( $deplist, $targets, $deps );
+
+#---------------------------------------------------
+
+# check different means of specifying variable name
+eval {
+  cleanup();
+  touch( 'data/targ1' );
+  ( $deplist, $targets, $deps ) = 
+    submit( -target => 'data/targ1',
+	    -depend => -var => ( -foo => 'data/dep1' ) );
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ && 
+     eq_hash( $deps, { 'data/targ1' => {
+					var    => [ 'foo' ],
+					time   => [],
+					sig    => [] }} 
+	    ), 'variable dependency, variable name as attribute' );
+
+# check different means of specifying variable name
+eval {
+  cleanup();
+  touch( 'data/targ1' );
+  ( $deplist, $targets, $deps ) = 
+    submit( -target => 'data/targ1',
+	    -depend => '-var=foo' => 'data/dep1'  );
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ && 
+     eq_hash( $deps, { 'data/targ1' => {
+					var    => [ 'foo' ],
+					time   => [],
+					sig    => [] }} 
+	    ), 'variable dependency, variable name as attr value' );
+
+# check different means of specifying variable name
+eval {
+  cleanup();
+  touch( 'data/targ1' );
+  ( $deplist, $targets, $deps ) = 
+    submit( -target => 'data/targ1',
+	    -depend => -var => { foo => 'data/dep1' } );
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ && 
+     eq_hash( $deps, { 'data/targ1' => {
+					var    => [ 'foo' ],
+					time   => [],
+					sig    => [] }} 
+	    ), 'variable dependency, variable name as attr value via hashref' );
 
 #---------------------------------------------------
 

@@ -13,7 +13,10 @@ my @specs = (
 	     -depend => -md5 => [ 'dep1',  '-slurp=' => 'dep2' ],
 	     '-slurp=33' => 'frank',
 	     -wave => -33,
-	     -snooker => \-39
+	     -snooker => \-39,
+	     -temp => -frodo => { snack => 'food',
+	                 flack => 'jacket' },
+             -hippo => 99
 	 );
 
 my @res = $Decision::Depends::self->_build_spec_list( undef, undef, \@specs );
