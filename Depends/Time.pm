@@ -31,8 +31,8 @@ sub new
 	 join( ', ', @notok ) ) if @notok;
 
   # ensure that the dependency exists
-  croak( __PACKAGE__, "->new: non-existant dependency: $self->{val}" )
-      unless -f $self->{val};
+#  croak( __PACKAGE__, "->new: non-existant dependency: $self->{val}" )
+#      unless -f $self->{val};
 
   bless $self, $class;
 }

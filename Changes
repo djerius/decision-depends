@@ -1,5 +1,11 @@
 Revision history for Perl extension Depends.
 
+0.08  Tue Apr  2 01:08:18 EST 2002
+        - test for dependency existance in Time->new didn't
+	  check the State cache (good when Pretend => 1 ).
+	  it seems to be a duplicate check, as it's also done
+	  (correctly) in Time->depends.  So, yank the check in new().
+
 0.07  Mon Apr  1
         - configure is more flexible in regards to the form of its
 	  arguments
