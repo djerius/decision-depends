@@ -194,7 +194,7 @@ sub getVar
   my ( $self, $target, $var ) = @_;
 
   # return undef if we have no record of this variable
-  exists $self->{Var}{$target} && $self->{Var}{$target}{$var} ? $self->{Var}{$target}{$var} : undef;
+  exists $self->{Var}{$target} && exists $self->{Var}{$target}{$var} ? $self->{Var}{$target}{$var} : undef;
 }
 
 
