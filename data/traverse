@@ -7,7 +7,6 @@ list:
    - 3
    - 0
   state: &id001 !perl/hash:Depends::State
-   File: ~
    Files: ~
    SLink: {}
    Sig: ~
@@ -48,7 +47,6 @@ state: *id001
   - 0
   - 0
  state: &id002 !perl/hash:Depends::State
-  File: ~
   Files: ~
   SLink: {}
   Sig: ~
@@ -84,7 +82,6 @@ state: *id001
  state: *id002
  val: targ4
 --- #YAML:1.0 !perl/hash:Depends::State
-File: ~
 Files: ~
 SLink: {}
 Sig: ~

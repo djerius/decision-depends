@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More qw( no_plan );
+use Test::More;
+plan( tests => 5 );
 
 use Depends;
 use Depends::Var;
@@ -34,7 +35,7 @@ ok ( !$@ &&
     'non-existant status file' );
 
 eval {
-  Depends::update( $deplist, $targets );
+  $Depends::self->_update( $deplist, $targets );
 };
 print STDERR $@ if $@ && $verbose;
 ok ( !$@ && -f 'data/targ1', 
@@ -61,7 +62,7 @@ ok ( !$@ &&
      'non-existant status file' );
 
 eval {
-  Depends::update( $deplist, $targets );
+  $Depends::self->_update( $deplist, $targets );
 };
 print STDERR $@ if $@ && $verbose;
 ok ( !$@ && -f 'data/targ1', 

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More qw( no_plan );
+use Test::More tests => 3;
 
 use Depends;
 use Depends::Var;
@@ -62,6 +62,45 @@ ok ( !$@ &&
 		     }) ,
 
 	      'lots of stuff' );
+
+#---------------------------------------------------
+
+# ensure that we're reading in the dependency file correctly
+my $cnt = 0;
+eval {
+  cleanup();
+
+  $Depends::self->{State}->EraseState;
+  Depends::Configure( { File => 'data/deps' } );
+
+  if_dep { 'data/targ1', -var => ( -foo => 'val' ) }
+  action {
+    touch( 'data/targ1' );
+  };
+
+  $Depends::self->{State}->EraseState;
+  Depends::Configure( { File => 'data/deps' } );
+
+  if_dep { 'data/targ1', -var => ( -foo => 'val' ) }
+  action {
+    $cnt++;
+  };
+
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ && $cnt == 0, 'dependency file reread correctly (1)' );
+
+eval {
+  $Depends::self->{State}->EraseState;
+  Depends::Configure( { File => 'data/deps' } );
+
+  if_dep { 'data/targ1', -var => ( -foo => 'val1' ) }
+  action {
+    $cnt++;
+  };
+};
+ok ( !$@ && $cnt == 1, 'dependency file reread correctly (2)' );
+
 
 #---------------------------------------------------
 

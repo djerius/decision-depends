@@ -3,4 +3,4 @@ Files: {}
 Sig: ~
 Var:
  data/targ1:
-  foo: val2
+  foo: val

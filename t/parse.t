@@ -16,7 +16,7 @@ my @specs = (
 	     -snooker => \-39
 	 );
 
-my @res = Depends::build_spec_list( undef, undef, \@specs );
+my @res = $Depends::self->_build_spec_list( undef, undef, \@specs );
 
 StoreFile( 'data/parse', \@res )
   if $create;

@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More qw( no_plan );
+use Test::More;
+plan( tests => 6);
 
 use Depends;
 use Depends::Var;
@@ -61,7 +62,7 @@ eval {
   ( $deplist, $targets, $deps ) =
     submit ( -target => 'data/targ1',
 	     -sig    => 'data/sig1',
-	     sub { $Depends::State->setSig( 'data/targ1', 'data/sig1',
+	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
 					    $sig ) }
 	     );
 
@@ -85,7 +86,7 @@ eval {
   ( $deplist, $targets, $deps ) =
     submit ( -target => 'data/targ1',
 	     -sig    => 'data/sig1',
-	     sub { $Depends::State->setSig( 'data/targ1', 'data/sig1', 
+	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1', 
 					    $sig ) }
 	     );
 
@@ -99,6 +100,61 @@ ok ( !$@ &&
 		     } 
 	    ),
      'different signature on file' );
+
+#---------------------------------------------------
+
+# force dependency
+eval {
+  cleanup();
+  mkfile( 'data/sig1', 'contents' );
+  touch( 'data/targ1', 'data/sig1' );
+  my $sig = Depends::Sig::mkSig( 'data/sig1' );
+
+  ( $deplist, $targets, $deps ) =
+    submit ( -target => 'data/targ1',
+	     -force => -sig    => 'data/sig1',
+	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
+					    $sig ) }
+	     );
+
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ && 
+     eq_hash( $deps, { 'data/targ1' => { target => [],
+					 var    => [],
+					 time   => [],
+					 sig    => [ 'data/sig1' ] }
+		     } 
+	    ),
+     'local force signature dependency' );
+
+#---------------------------------------------------
+
+# force dependency
+eval {
+  cleanup();
+  mkfile( 'data/sig1', 'contents' );
+  touch( 'data/targ1', 'data/sig1' );
+  my $sig = Depends::Sig::mkSig( 'data/sig1' );
+
+  ( $deplist, $targets, $deps ) =
+    submit ( { Force => 1 },
+             -target => 'data/targ1',
+	     -sig    => 'data/sig1',
+	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
+					    $sig ) }
+	     );
+
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ && 
+     eq_hash( $deps, { 'data/targ1' => { target => [],
+					 var    => [],
+					 time   => [],
+					 sig    => [ 'data/sig1' ] }
+		     } 
+	    ),
+     'global force signature dependency' );
 
 #---------------------------------------------------
 

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More qw( no_plan);
+use Test::More tests => 5;
 use YAML qw( StoreFile LoadFile );
 
 our $verbose = 0;
@@ -52,21 +52,22 @@ if ( $create )
 {
   delete $deplist->{Attr};
   delete $targets->{Attr};
-  delete $Depends::State->{Attr};
-  StoreFile( 'data/traverse', $deplist, $targets, $Depends::State );
+  delete $Depends::self->{State}->{Attr};
+  StoreFile( 'data/traverse', $deplist, $targets, $Depends::self->{State} );
 }
 
 my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );
 
+$DB::single=1;
 # must rid ourselves of those pesky attributes, as it makes
 # debugging things tough
 delete $deplist->{Attr};
 delete $targets->{Attr};
-delete $Depends::State->{Attr};
+delete $Depends::self->{State}->{Attr};
 
 ok( eq_hash( $c_deplist, $deplist ), "Dependency list" );
 ok( eq_array( $c_targets, $targets ), "Targets" );
-ok( eq_hash( $c_state, $Depends::State ), "State" );
+ok( eq_hash( $c_state, $Depends::self->{State} ), "State" );
 
 #---------------------------------------------------
 
@@ -77,10 +78,10 @@ sub submit
 {
   my ( @specs ) = @_;
 
-  Depends::init( undef, { Verbose => $verbose } );
+  Depends::Configure( { Verbose => $verbose } );
 
-  my @res = Depends::build_spec_list( undef, undef, \@specs );
-  my ( $deplist, $targets ) = Depends::traverse_spec_list( @res );
+  my @res = $Depends::self->_build_spec_list( undef, undef, \@specs );
+  my ( $deplist, $targets ) = $Depends::self->_traverse_spec_list( @res );
 }
 
 

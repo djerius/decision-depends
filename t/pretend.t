@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More qw( no_plan );
+use Test::More tests => 2;
 
 use Depends;
 use Depends::Var;
@@ -35,8 +35,8 @@ ok ( !$@ &&
 	    ),
      'time dependency, non-existant target' );
 
-Depends::update($deplist, $targets );
-ok( defined $Depends::State->getTime('data/targ1'),
+$Depends::self->_update($deplist, $targets );
+ok( defined $Depends::self->{State}->getTime('data/targ1'),
 	"update pretend time" );
 
 #---------------------------------------------------

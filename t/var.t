@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More qw( no_plan );
+use Test::More;
+plan( tests => 5 );
 
 use Depends;
 use Depends::Var;
@@ -40,7 +41,7 @@ eval {
   ( $deplist, $targets, $deps ) = 
     submit( -target => 'data/targ1',
 	    -depend => -var => ( -foo => 'val' ),
-	    sub { $Depends::State->setVar( 'data/targ1', foo => 'val' ) }
+	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
 	    );
 };
 print STDERR $@ if $@ && $verbose;
@@ -57,7 +58,7 @@ eval {
   ( $deplist, $targets, $deps ) = 
     submit( -target => 'data/targ1',
 	    -depend => -var => ( -foo => 'val' ),
-	    sub { $Depends::State->setVar( 'data/targ1', foo => 'val2' ) }
+	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val2' ) }
 	    );
 };
 print STDERR $@ if $@ && $verbose;
@@ -68,6 +69,49 @@ ok ( !$@ &&
 					sig    => [] } } 
 	    ),
      'variable dependency, different value' );
+
+#---------------------------------------------------
+
+# variable dependency, var with same value.
+eval {
+  cleanup();
+  touch( 'data/targ1' );
+  ( $deplist, $targets, $deps ) = 
+    submit( -target => 'data/targ1',
+	    -force => -depend => -var => ( -foo => 'val' ),
+	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
+	    );
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ &&
+     eq_hash( $deps, { 'data/targ1' => {
+					var    => [ 'foo' ],
+					time   => [],
+					sig    => [] } } 
+	    ),
+     'local force variable dependency' );
+
+#---------------------------------------------------
+
+# variable dependency, var with same value.
+eval {
+  cleanup();
+  touch( 'data/targ1' );
+  ( $deplist, $targets, $deps ) = 
+    submit( { Force => 1 },
+            -target => 'data/targ1',
+	    -depend => -var => ( -foo => 'val' ),
+	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
+	    );
+};
+print STDERR $@ if $@ && $verbose;
+ok ( !$@ &&
+     eq_hash( $deps, { 'data/targ1' => {
+					var    => [ 'foo' ],
+					time   => [],
+					sig    => [] } } 
+	    ),
+     'global force variable dependency' );
 
 #---------------------------------------------------
 

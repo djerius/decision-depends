@@ -6,16 +6,17 @@ sub submit
   my %Attr = %{ shift @_ } if 'HASH' eq ref $_[0];
   my ( @specs ) = @_;
 
-  Depends::init( $depfile, { Verbose => $verbose, Cache => 0, %Attr } )
+  Depends::Configure( { File => $depfile, Verbose => $verbose, 
+			Cache => 0, %Attr } )
       unless $Attr{NoInit};
 
-  my @res = Depends::build_spec_list( undef, undef, \@specs );
-  my ( $deplist, $targets ) = Depends::traverse_spec_list( @res );
+  my @res = $Depends::self->_build_spec_list( undef, undef, \@specs );
+  my ( $deplist, $targets ) = $Depends::self->_traverse_spec_list( @res );
 
   &$poke( $deplist, $targets )
     if $poke;
 
-  my $deps = Depends::depends( $deplist, $targets);
+  my $deps = $Depends::self->_depends( $deplist, $targets);
 
   ( $deplist, $targets, $deps );
 }
