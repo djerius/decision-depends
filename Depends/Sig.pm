@@ -44,7 +44,6 @@ sub depends
 
   my $prev_val = $self->{state}->getSig( $target, $self->{val} );
 
-  $DB::single=1;
   if ( defined $prev_val )
   {
     my $is_not_equal = 

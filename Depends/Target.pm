@@ -58,7 +58,6 @@ sub setTime
   my @sb;
   my $file = $self->{val};
 
-  $DB::single=1;
   my $time = $self->{Pretend} ?
                   time () : ((@sb = stat( $file )) ? $sb[9] : undef);
 
