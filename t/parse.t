@@ -4,7 +4,7 @@ use warnings;
 use Test::More tests => 1;
 
 use Depends;
-use Data::Denter;
+use YAML qw( StoreFile LoadFile );
 
 our $create = 0;
 
@@ -18,21 +18,9 @@ my @specs = (
 
 my @res = Depends::build_spec_list( undef, undef, \@specs );
 
-if ( $create )
-{
-  open( DATA, ">data/parse" ) or die( "unable to create data/parse\n" );
-  print DATA Indent(\@res);
-  close( DATA );
-}
+StoreFile( 'data/parse', \@res )
+  if $create;
 
-my $c_res;
-
-{
-  local $/ = undef;
-  open( DATA, "data/parse" ) 
-    or die( "unable to open data/parse\n" );
-  ( $c_res ) = Undent( <DATA> );
-  close( DATA );
-}
+my $c_res = LoadFile( 'data/parse' );
 
 ok( eq_array( \@res, $c_res ), 'token parse' );

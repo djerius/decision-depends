@@ -1,50 +1,50 @@
-@
-    %
-        attr => %
-            target => 1
-            unalias => 1
-        id => @
-            0
-            0
-        val => targ1
-    %
-        attr => %
-        id => @
-            0
-            1
-        val => targ2
-    %
-        attr => %
-            depend => 1
-            md5 => 1
-        id => @
-            1
-            0
-        val => dep1
-    %
-        attr => %
-            depend => 1
-            md5 => 1
-            slurp => ""
-        id => @
-            1
-            1
-        val => dep2
-    %
-        attr => %
-            slurp => 33
-        id => @
-            2
-        val => frank
-    %
-        attr => %
-            wave => 1
-        id => @
-            3
-        val => -33
-    %
-        attr => %
-            snooker => 1
-        id => @
-            4
-        val => -39
+--- #YAML:1.0
+-
+ attr:
+  target: 1
+  unalias: 1
+ id:
+  - 0
+  - 0
+ val: targ1
+-
+ attr: {}
+ id:
+  - 0
+  - 1
+ val: targ2
+-
+ attr:
+  depend: 1
+  md5: 1
+ id:
+  - 1
+  - 0
+ val: dep1
+-
+ attr:
+  depend: 1
+  md5: 1
+  slurp: ''
+ id:
+  - 1
+  - 1
+ val: dep2
+-
+ attr:
+  slurp: 33
+ id:
+  - 2
+ val: frank
+-
+ attr:
+  wave: 1
+ id:
+  - 3
+ val: -33
+-
+ attr:
+  snooker: 1
+ id:
+  - 4
+ val: -39

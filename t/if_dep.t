@@ -2,8 +2,6 @@ use strict;
 use warnings;
 
 use Test::More qw( no_plan );
-use Data::Denter;
-use Data::Dumper;
 
 use Depends;
 use Depends::Var;

@@ -2,10 +2,10 @@ use strict;
 use warnings;
 
 use Test::More qw( no_plan);
-use Data::Denter;
+use YAML qw( StoreFile LoadFile );
 
 our $verbose = 0;
-our $create = 1;
+our $create = 0;
 
 use Depends;
 
@@ -53,20 +53,10 @@ if ( $create )
   delete $deplist->{Attr};
   delete $targets->{Attr};
   delete $Depends::State->{Attr};
-  open( DATA, ">data/traverse" ) or die( "unable to create data/traverse\n" );
-  print DATA Indent($deplist, $targets, $Depends::State);
-  close( DATA );
+  StoreFile( 'data/traverse', $deplist, $targets, $Depends::State );
 }
 
-my ( $c_deplist, $c_targets, $c_state );
-{
-  local $/ = undef;
-  open( DATA, "data/traverse" ) 
-    or die( "unable to open data/traverse\n" );
-  ( $c_deplist, $c_targets, $c_state ) = Undent( <DATA> );
-  close( DATA );
-
-}
+my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );
 
 # must rid ourselves of those pesky attributes, as it makes
 # debugging things tough

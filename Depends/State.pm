@@ -97,7 +97,7 @@ sub DumpAll
 {
   my $self = shift;
 
-  print STDERR Denter $self;
+  print STDERR YAML::Store($self);
 }
 
 sub Verbose
