@@ -98,6 +98,7 @@ sub mkSFile
 
   my $file = $self->{val};
 
+  unlink $file;
   open( FILE, ">$file" )
     or croak( __PACKAGE__, "->mkSFile: unable to create file `$file'" );
   close FILE;
