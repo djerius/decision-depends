@@ -7,5 +7,6 @@ WriteMakefile(
     'PMLIBDIRS'		=> [ 'Depends' ],
     'PREREQ_PM'		=> { YAML => 0.35,
 			     Test::More => 0,
+			     Tie::IxHash => 0,
 			   }, # e.g., Module::Name => 1.1
 );

@@ -1,5 +1,12 @@
 Revision history for Perl extension Decision::Depends.
 
+0.15  Thu Jun 26 13:32:43 EDT 2003
+        - added hash ref means of associating attribute values and
+	  ordinary values
+	- modified variable dependencies so can find name of variable
+	  in attribute value.  this allows easy specification of
+	  variable names and values via the hashref method above.
+
 0.14  Wed Jan 22 00:17:32 EST 2003
         - AutoSave option was undocumented and no longer needed.
 	- Added warning about absolute path for dependency file to docs.

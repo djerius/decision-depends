@@ -13,6 +13,9 @@ use Decision::Depends::State;
 use Decision::Depends::List;
 use Decision::Depends::Target;
 
+use Tie::IxHash;
+
+
 # regular expression for a floating point number
 our $RE_Float = qr/^[+-]?(\d+[.]?\d*|[.]\d+)([dDeE][+-]?\d+)?$/;
 
@@ -170,7 +173,7 @@ sub _build_spec_list
   my $self = shift;
   my ( $attrs, $levels, $specs ) = @_;
 
-  $attrs = [ {} ] unless defined $attrs;
+  $attrs = [ Tie::IxHash->new() ] unless defined $attrs;
   $levels = [ -1 ] unless defined $levels;
 
   my @res;
@@ -185,18 +188,18 @@ sub _build_spec_list
     {
       if ( defined $1 )
       {
-	$attrs->[-1]{$2} = undef;
+	$attrs->[-1]->Push( $2 => undef);
       }
       else
       {
-	$attrs->[-1]{$2} = defined $3 ? $3 : 1;
+	$attrs->[-1]->Push( $2 => defined $3 ? $3 : 1);
       }
     }
 
     # maybe a nested level?
     elsif ( 'ARRAY' eq $ref )
     {
-      push @$attrs, {};
+      push @$attrs, Tie::IxHash->new();
       $levels->[-1]++;
       push @$levels, -1;
       push @res, $self->_build_spec_list( $attrs, $levels, $spec );
@@ -204,12 +207,14 @@ sub _build_spec_list
       pop @$levels;
 
       # reset attributes
-      $attrs->[-1] = {};
+      $attrs->[-1] = Tie::IxHash->new();
     }
 
     # a value
     elsif ( 'SCALAR' eq $ref || ! $ref )
     {
+      $DB::single=1;
+
       $spec = $$spec if $ref;
 
       $levels->[-1]++;
@@ -217,7 +222,7 @@ sub _build_spec_list
       foreach my $lattr ( @$attrs )
       {
 	my ( $key, $val );
-	$attr{$key} = $val while ( ($key,$val) = each %$lattr );
+	$attr{$_} = $lattr->FETCH($_) foreach $lattr->Keys;
       }
       delete @attr{ grep { ! defined $attr{$_} } keys %attr };
       push @res, { id => [ @$levels ], 
@@ -225,9 +230,36 @@ sub _build_spec_list
 		   attr => \%attr };
 
       # reset attributes
-      $attrs->[-1] = {};
+      $attrs->[-1] = Tie::IxHash->new();
     }
 
+    # hash; keys are values of last attribute specified
+    elsif( 'HASH' eq $ref )
+    {
+      # find last attribute specified; may have to search upwards through
+      # nested levels
+      ( my $lattr ) = grep { defined $_->Keys(-1) } reverse @$attrs;
+      croak( __PACKAGE__, '::_build_spec_list:', 
+	     "can't find an attribute to assign values to with this hash!\n" )
+	unless defined $lattr;
+
+      my $attr = $lattr->Keys(-1);
+
+      # create a new level
+      while ( my ( $attrval, $lspec ) = each %$spec )
+      {
+	push @$attrs, Tie::IxHash->new($attr => $attrval);
+	$levels->[-1]++;
+	push @$levels, -1;
+	push @res, $self->_build_spec_list( $attrs, $levels, [ $lspec ] );
+	pop @$attrs;
+	pop @$levels;
+      }
+
+      # reset attributes
+      $attrs->[-1] = Tie::IxHash->new();
+
+    }
   }
 
   @res;
