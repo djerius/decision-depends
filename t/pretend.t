@@ -3,8 +3,8 @@ use warnings;
 
 use Test::More tests => 2;
 
-use Depends;
-use Depends::Var;
+use Decision::Depends;
+use Decision::Depends::Var;
 
 require 't/common.pl';
 require 't/depends.pl';
@@ -35,8 +35,8 @@ ok ( !$@ &&
 	    ),
      'time dependency, non-existant target' );
 
-$Depends::self->_update($deplist, $targets );
-ok( defined $Depends::self->{State}->getTime('data/targ1'),
+$Decision::Depends::self->_update($deplist, $targets );
+ok( defined $Decision::Depends::self->{State}->getTime('data/targ1'),
 	"update pretend time" );
 
 #---------------------------------------------------

@@ -4,8 +4,8 @@ use warnings;
 use Test::More;
 plan( tests => 4 );
 
-use Depends;
-use Depends::Var;
+use Decision::Depends;
+use Decision::Depends::Var;
 
 require 't/common.pl';
 require 't/depends.pl';

@@ -3,8 +3,8 @@ use warnings;
 
 use Test::More tests => 3;
 
-use Depends;
-use Depends::Var;
+use Decision::Depends;
+use Decision::Depends::Var;
 
 require 't/common.pl';
 require 't/depends.pl';
@@ -19,7 +19,7 @@ eval {
   cleanup();
   touch( 'data/targ1', 'data/dep1', 'data/dep2' );
   mkfile( 'data/sig1', 'contents' );
-  my $sig = Depends::Sig::mkSig( 'data/sig1' );
+  my $sig = Decision::Depends::Sig::mkSig( 'data/sig1' );
 
   ( $deplist, $targets, $deps ) =
     submit ( 
@@ -70,16 +70,16 @@ my $cnt = 0;
 eval {
   cleanup();
 
-  $Depends::self->{State}->EraseState;
-  Depends::Configure( { File => 'data/deps' } );
+  $Decision::Depends::self->{State}->EraseState;
+  Decision::Depends::Configure( { File => 'data/deps' } );
 
   if_dep { 'data/targ1', -var => ( -foo => 'val' ) }
   action {
     touch( 'data/targ1' );
   };
 
-  $Depends::self->{State}->EraseState;
-  Depends::Configure( { File => 'data/deps' } );
+  $Decision::Depends::self->{State}->EraseState;
+  Decision::Depends::Configure( { File => 'data/deps' } );
 
   if_dep { 'data/targ1', -var => ( -foo => 'val' ) }
   action {
@@ -91,8 +91,8 @@ print STDERR $@ if $@ && $verbose;
 ok ( !$@ && $cnt == 0, 'dependency file reread correctly (1)' );
 
 eval {
-  $Depends::self->{State}->EraseState;
-  Depends::Configure( { File => 'data/deps' } );
+  $Decision::Depends::self->{State}->EraseState;
+  Decision::Depends::Configure( { File => 'data/deps' } );
 
   if_dep { 'data/targ1', -var => ( -foo => 'val1' ) }
   action {

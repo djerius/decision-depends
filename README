@@ -1,36 +1,59 @@
-			 ====================
-			 Depends Version 0.09
-			 ====================
-
+		      =========================
+		      Decision::Depends v. 0.09
+		      =========================
 
 NAME
-    Depends - Track dependencies
-
+    Decision::Depends - Perform actions based upon file dependencies
 
 DESCRIPTION
+     Decision::Depends is a module which simplifies the creation
+     of procedures with intermediate steps which can be skipped
+     if certain dependencies are met.  Think of it as a
+     procedural version of make.
 
-    Depends is a module which simplifies tracking of file dependencies
-    based on file time stamps and file contents.  Think of it as a
-    procedural version of make.
+     Decision::Depends is useful when there are several steps in
+     a process, each of which depends upon the last.  If the
+     process is interrupted, or if it is to be redone with
+     changes to parameters in later steps, and if intermediate
+     results can be kept, then Decision::Depends can insure that
+     only the minimal number of steps be redone.
+
+     Each step must result in a tangible product (a file).  For
+     complicated steps with many products the step's successful
+     completion may be indicated by creating an empty file whose
+     existance indicates completion.  This file (a "status" file
+     in Decision::Depends terminology) can be automatically
+     created if requested.
+
+     Decision::Depends determines if the product for a given step
+     is older than any files required to produce it.  It can also
+     check whether the contents of a file have changed since the
+     product was last created.  This is useful in the case where
+     a configuration file must be created anew each time, but
+     results in action only if changed since the product was last
+     created. Finally, it can determine if a variable's value has
+     changed since the product was last created.
 
 
 DEPENDENCIES
 
-    The following Perl modules are required:
-
-        YAML
+	YAML
 	Test::More
 
 INSTALLATION
 
-    This package has been tested on Perl 5.6.0 and Solaris 2.8.
-
-    To compile, test and install Depends,
+    This package has been tested with Perl 5.6.1 on Solaris 2.8.
 
 	perl Makefile.PL
 	make
 	make test
 	make install
+
+CAVEATS
+
+    The tests poke at the innards. Be careful if you use them as
+    examples that you don't use undocumented interfaces, as they may
+    change (in particular, don't use $Decision::Depends::self).
 
 CHANGES
 
@@ -60,5 +83,5 @@ COPYRIGHT
 
 AUTHOR
 
-    Diab Jerius (djerius@cpan.org)
+    Diab Jerius ( djerius@cpan.org )
 

@@ -3,8 +3,8 @@ use warnings;
 
 use Test::More tests => 4;
 
-use Depends;
-use Depends::Var;
+use Decision::Depends;
+use Decision::Depends::Var;
 
 require 't/common.pl';
 require 't/depends.pl';
@@ -16,7 +16,7 @@ our $verbose = 0;
 # no deps, non-existant target, ok return
 eval {
   cleanup();
-  Depends::Configure( { File => 'data/deps' } );
+  Decision::Depends::Configure( { File => 'data/deps' } );
   if_dep {  -target => 'data/targ1' }
     action { touch( 'data/targ1' ) };
 };
@@ -29,7 +29,7 @@ ok ( !$@ && -f 'data/targ1',
 # no deps, non-existant target, sfile, ok return
 eval {
   cleanup();
-  Depends::Configure( { File => 'data/deps' } );
+  Decision::Depends::Configure( { File => 'data/deps' } );
   if_dep {  -target => -sfile => 'data/targ1' }
     action { };
 };
@@ -43,7 +43,7 @@ ok ( !$@ && -f 'data/targ1',
 # no deps, non-existant target, die
 eval {
   cleanup();
-  Depends::Configure( { File => 'data/deps' } );
+  Decision::Depends::Configure( { File => 'data/deps' } );
   if_dep {  -target => 'data/targ1' }
     action { die("ERROR (expected)\n") };
 };
@@ -57,7 +57,7 @@ ok ( $@ && $@ =~ /^ERROR/ && ! -f 'data/targ1',
 # no deps, non-existant target, rethrow
 eval {
   cleanup();
-  Depends::Configure( { File => 'data/deps' } );
+  Decision::Depends::Configure( { File => 'data/deps' } );
   if_dep {  -target => 'data/targ1' }
     action { die("ERROR (expected)\n") }
 	or die( "rethrow ERROR" );

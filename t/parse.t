@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More tests => 1;
 
-use Depends;
+use Decision::Depends;
 use YAML qw( StoreFile LoadFile );
 
 our $create = 0;
@@ -16,7 +16,7 @@ my @specs = (
 	     -snooker => \-39
 	 );
 
-my @res = $Depends::self->_build_spec_list( undef, undef, \@specs );
+my @res = $Decision::Depends::self->_build_spec_list( undef, undef, \@specs );
 
 StoreFile( 'data/parse', \@res )
   if $create;

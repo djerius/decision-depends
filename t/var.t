@@ -4,8 +4,8 @@ use warnings;
 use Test::More;
 plan( tests => 13 );
 
-use Depends;
-use Depends::Var;
+use Decision::Depends;
+use Decision::Depends::Var;
 
 require 't/common.pl';
 require 't/depends.pl';
@@ -42,7 +42,7 @@ eval {
   ( $deplist, $targets, $deps ) = 
     submit( -target => 'data/targ1',
 	    -depend => -var => ( -foo => 'val' ),
-	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
+	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
 	    );
 };
 print STDERR $@ if $@ && $verbose;
@@ -59,7 +59,7 @@ eval {
   ( $deplist, $targets, $deps ) = 
     submit( -target => 'data/targ1',
 	    -depend => -var => ( -foo => 'val' ),
-	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val2' ) }
+	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val2' ) }
 	    );
 };
 print STDERR $@ if $@ && $verbose;
@@ -80,7 +80,7 @@ eval {
   ( $deplist, $targets, $deps ) = 
     submit( -target => 'data/targ1',
 	    -force => -depend => -var => ( -foo => 'val' ),
-	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
+	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
 	    );
 };
 print STDERR $@ if $@ && $verbose;
@@ -102,7 +102,7 @@ eval {
     submit( { Force => 1 },
             -target => 'data/targ1',
 	    -depend => -var => ( -foo => 'val' ),
-	    sub { $Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
+	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
 	    );
 };
 print STDERR $@ if $@ && $verbose;
@@ -120,7 +120,7 @@ ok ( !$@ &&
 
 eval {
   cleanup();
-  Depends::Configure( { Verbose => $verbose, File => 'data/deps' } );
+  Decision::Depends::Configure( { Verbose => $verbose, File => 'data/deps' } );
 
   my $val = '0.1470';
 
@@ -150,7 +150,7 @@ ok ( !$@,  'guessed numerical values' );
 
 eval {
   cleanup();
-  Depends::Configure( { Verbose => $verbose, File => 'data/deps1' } );
+  Decision::Depends::Configure( { Verbose => $verbose, File => 'data/deps1' } );
 
   my $val = '0.1470';
 
@@ -190,7 +190,7 @@ ok ( !$@,  'forced string compare of num values' );
 
 eval {
   cleanup();
-  Depends::Configure( { Verbose => $verbose, File => 'data/deps1' } );
+  Decision::Depends::Configure( { Verbose => $verbose, File => 'data/deps1' } );
 
   my $val = 'snake';
 

@@ -1,4 +1,4 @@
-package Depends::List;
+package Decision::Depends::List;
 
 require 5.005_62;
 use strict;
@@ -8,9 +8,9 @@ use Carp;
 
 our $VERSION = '0.01';
 
-use Depends::Time;
-use Depends::Var;
-use Depends::Sig;
+use Decision::Depends::Time;
+use Decision::Depends::Var;
+use Decision::Depends::Sig;
 
 # Preloaded methods go here.
 
@@ -107,40 +107,4 @@ sub update
   }
 }
 
-
-
 1;
-__END__
-# Below is stub documentation for your module. You better edit it!
-
-=head1 NAME
-
-Depends::Time - Perl extension for blah blah blah
-
-=head1 SYNOPSIS
-
-  use Depends::Time;
-  blah blah blah
-
-=head1 DESCRIPTION
-
-Stub documentation for Depends::Time, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
-
-Blah blah blah.
-
-=head2 EXPORT
-
-None by default.
-
-
-=head1 AUTHOR
-
-A. U. Thor, a.u.thor@a.galaxy.far.far.away
-
-=head1 SEE ALSO
-
-perl(1).
-
-=cut

@@ -1,4 +1,4 @@
-package Depends;
+package Decision::Depends;
 
 require 5.005_62;
 use strict;
@@ -12,7 +12,7 @@ our @ISA = qw(Exporter);
 # names by default without a very good reason. Use EXPORT_OK instead.
 # Do not simply export all your public functions/methods/constants.
 
-# This allows declaration	use Depends ':all';
+# This allows declaration	use Decision::Depends ':all';
 # If you do not need this, moving things directly into @EXPORT or @EXPORT_OK
 # will save memory.
 our %EXPORT_TAGS = ( 'all' => [ qw(
@@ -27,12 +27,12 @@ action
 test_dep
 );
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 use Carp;
-use Depends::OO;
+use Decision::Depends::OO;
 
-our $self = Depends::OO->new();
+our $self = Decision::Depends::OO->new();
 
 sub if_dep(&@)
 {
@@ -58,7 +58,7 @@ sub init
 {
   my ( $state_file, $attr ) = @_;
 
-  print STDERR "Depends::init is obsolete.  Please use Depends::Configure instead\n";
+  print STDERR "Decision::Depends::init is obsolete.  Please use Decision::Depends::Configure instead\n";
 
   Configure( { File => $state_file, $attr ? %$attr : () } );
 }
@@ -66,75 +66,77 @@ sub init
 sub renew
 {
   undef $self;
-  $self = Depends::OO->new();
+  $self = Decision::Depends::OO->new();
 }
 
 1;
 
 __END__
-# Below is stub documentation for your module. You better edit it!
 
 =head1 NAME
 
-Depends - Track dependencies
+Decision::Depends - Perform actions based upon file dependencies
 
 =head1 SYNOPSIS
 
-  use Depends;
+  use Decision::Depends;
 
-  Depends::Configure( { File => $depfile } );
+  Decision::Depends::Configure( { File => $depfile } );
   if_dep { @targ_dep_list } 
      action { action };
 
 =head1 DESCRIPTION
 
-B<Depends> is a module which simplifies tracking of file dependencies
-based on file time stamps and file contents.  Think of it as a
-procedural version of B<make>.
+B<Decision::Depends> is a module which simplifies the creation of
+procedures with intermediate steps which can be skipped if certain
+dependencies are met.  Think of it as a procedural version of B<make>.
 
-B<Depends> is useful when there are several steps in a process, each
-of which depends upon the last.  If the process is interrupted, or if
-it is to be redone with changes to parameters in later steps, and if
-intermediate results can be kept, then B<Depends> can insure that only
-the minimal number of steps be redone.
+B<Decision::Depends> is useful when there are several steps in a
+process, each of which depends upon the last.  If the process is
+interrupted, or if it is to be redone with changes to parameters in
+later steps, and if intermediate results can be kept, then
+B<Decision::Depends> can insure that only the minimal number of steps
+be redone.
 
 Each step must result in a tangible product (a file).  For complicated
 steps with many products the step's successful completion may be
 indicated by creating an empty file whose existance indicates
-completion.  This file (a C<status> file in B<Depends> terminology)
-can be automatically created if requested.
+completion.  This file (a C<status> file in B<Decision::Depends>
+terminology) can be automatically created if requested.
 
-B<Depends> determines if the product for a given step is older than
-any files required to produce it.  It can also check whether the
-contents of a file have changed since the product was last created.
-This is useful in the case where a configuration file must be created
-anew each time, but results in action only if changed since the
-product was last created. Finally, it can determine if a variable's
-value has changed since the product was last created.
+B<Decision::Depends> determines if the product for a given step is
+older than any files required to produce it.  It can also check
+whether the contents of a file have changed since the product was last
+created.  This is useful in the case where a configuration file must
+be created anew each time, but results in action only if changed since
+the product was last created. Finally, it can determine if a
+variable's value has changed since the product was last created.
 
 =head2 Dependency history
 
-B<Depends> must keep some dependency information between runs (for
-signature and variable dependencies). It stores this in a file,
-which must be named by the application.  The application indicates
-the file by calling the B<Depends::Configure> subroutine.
+B<Decision::Depends> must keep some dependency information between
+runs (for signature and variable dependencies). It stores this in a
+file, which must be named by the application.  The application
+indicates the file by calling the B<Decision::Depends::Configure>
+subroutine.
 
 This file is updated after completion of successful actions and
 when the program is exited.
 
 =head2 Dry Runs and Changing other behavior
 
-B<Depends> can be put into a state where it checks dependencies
-and pretends to update targets in order to check what actions might
-need to be taken.  This is done by passing the C<Pretend> attribute
-to B<Depends::Configure>.  In this mode no actions are actually performed,
-but are assumed to have successfully created their products.
+B<Decision::Depends> can be put into a state where it checks
+dependencies and pretends to update targets in order to check what
+actions might need to be taken.  This is done by passing the
+C<Pretend> attribute to B<Decision::Depends::Configure>.  In this mode
+no actions are actually performed, but are assumed to have
+successfully created their products.
 
-B<Depends> will output to STDERR its musings if the C<Verbose>
-attribute is passed to B<Depends::Configure>.
+B<Decision::Depends> will output to STDERR its musings if the
+C<Verbose> attribute is passed to B<Decision::Depends::Configure>.
 
-To simply test if a dependency exists, without requiring that
-an action be performed, use the B<test_dep> function.
+To simply test if a dependency exists, without requiring that an
+action be performed, use the B<test_dep> function.
 
 
 =head2 Targets and Dependencies List
@@ -292,16 +294,16 @@ are normally not case sensitive.
 =item C<-numcmp>
 
 If specified, treat the value as a number (integer or floating point).
-Generally B<Depends> does a good job at guessing whether a value is a
-number or not; this forces it to treat it as a number if it guesses
-wrong.  This may not be mixed with the B<-str> attribute.
+Generally B<Decision::Depends> does a good job at guessing whether a
+value is a number or not; this forces it to treat it as a number if it
+guesses wrong.  This may not be mixed with the B<-strcmp> attribute.
 
 =item C<-strcmp>
 
-If specified, treat the value as a string.  Generally B<Depends> does
-a good job at guessing whether a value is a number or not; this forces
-it to treat it as a string if it guesses wrong.  This may not be mixed
-with the B<-str> attribute.
+If specified, treat the value as a string.  Generally
+B<Decision::Depends> does a good job at guessing whether a value is a
+number or not; this forces it to treat it as a string if it guesses
+wrong.  This may not be mixed with the B<-str> attribute.
 
 =back
 
@@ -316,10 +318,10 @@ of dependency.  These are:
 
 If set to non-zero (the default if no value is specified), this will
 force the dependency to always be out-of-date.  This can be used to
-override a global forcing of dependencies (done via the B<Depend::Configure>
-function) by setting it to zero.  For example:
+override a global forcing of dependencies (done via the
+B<Depend::Configure> function) by setting it to zero.  For example:
 
-  Depends::Configure( { Force => 1 } );
+  Decision::Depends::Configure( { Force => 1 } );
   if_dep { -target => $target,
            -depend => '-force=0' => $dep }
   action { ... }
@@ -329,16 +331,16 @@ function) by setting it to zero.  For example:
 
 =head2 Action specification
 
-B<Depends> exports the function B<if_dep>, which is used by the
-application to specify the targets and dependencies and the action to
-be taken if the dependencies have not been met.  It has the form
+B<Decision::Depends> exports the function B<if_dep>, which is used by
+the application to specify the targets and dependencies and the action
+to be taken if the dependencies have not been met.  It has the form
 
   if_dep { targdep }
      action { actions };
 
 where I<targdep> is Perl code which results in a target and dependency
-list and I<actions> is Perl code to generate the target.
-Note the final semi-colon.
+list and I<actions> is Perl code to generate the target.  Note the
+final semi-colon.
 
 The target dependency list code is generally very simple:
 
@@ -387,9 +389,9 @@ If F<foo.out> did exist, but was older than F<foo.in>,
                            sig => [] } };
 
 Unless the target is a status file (with attributes C<-sfile> or
-C<-slink>), the action routine B<must> create the target file.  It B<must>
-indicate the success or failure of the action by calling B<die()> if there
-is an error:
+C<-slink>), the action routine B<must> create the target file.  It
+B<must> indicate the success or failure of the action by calling
+B<die()> if there is an error:
 
   if_dep { -target => 'foo.out', -depend => 'foo.in' }
     action {
@@ -399,12 +401,12 @@ is an error:
 	or die( "error frobnagling!\n" );
     };
 
-B<if_dep> will catch the B<die()>. There are two manners in which
-the error will be passed on by B<if_dep>.  If B<if_dep> is called
-in a void context (i.e., its return value is being ignored), it
-will B<croak()> (See L<Carp>).  If called in a scalar context,
-it will return C<true> upon success and C<false> upon error.  In either
-case the C<$@> variable will contain the text passed to the original
+B<if_dep> will catch the B<die()>. There are two manners in which the
+error will be passed on by B<if_dep>.  If B<if_dep> is called in a
+void context (i.e., its return value is being ignored), it will
+B<croak()> (See L<Carp>).  If called in a scalar context, it will
+return C<true> upon success and C<false> upon error.  In either case
+the C<$@> variable will contain the text passed to the original
 B<die()> call.
 
 The following two examples have the same result:
@@ -442,18 +444,18 @@ ref).  For example:
 
 =over 8
 
-=item Depends::Configure
+=item Decision::Depends::Configure
 
-This routine sets various attributes which control B<Depends>
-behavior, including the file to which B<Depends> writes its dependency
-information. Attributes are option-value pairs, and may be passed as
-lists of pairs, arrayrefs (containing pairs), or hashrefs (or any mix
-thereof):
+This routine sets various attributes which control
+B<Decision::Depends> behavior, including the file to which
+B<Decision::Depends> writes its dependency information. Attributes are
+option-value pairs, and may be passed as lists of pairs, arrayrefs
+(containing pairs), or hashrefs (or any mix thereof):
 
   @attr2 = ( $attr => $value );
   $attr{$attr} = $value;
-  Depends::Configure( \%attr, $attr => $value, \@attr );
-  
+  Decision::Depends::Configure( \%attr, $attr => $value, \@attr );
+
 A dependency file is not required if there are no signature or
 variable dependencies.  In that case, if no attributes need be set,
 this routine need not be called at all. 
@@ -474,18 +476,18 @@ forcing execution of all actions.
 
 =item Pretend
 
-If set to a non-zero value, B<Depends> will simulate the actions
+If set to a non-zero value, B<Decision::Depends> will simulate the actions
 to track what might happen.
 
 =item Verbose
 
-If set to a non-zero value, B<Depends> will be somewhat verbose.
+If set to a non-zero value, B<Decision::Depends> will be somewhat verbose.
 
 =back
 
 For example,
 
-  Depends::Configure( { File => $depfile Pretend => 1, Verbose => 1 } );
+  Decision::Depends::Configure( { File => $depfile Pretend => 1, Verbose => 1 } );
 
 
 =back

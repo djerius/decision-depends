@@ -8,7 +8,7 @@ use YAML qw( StoreFile LoadFile );
 our $verbose = 0;
 our $create = 0;
 
-use Depends;
+use Decision::Depends;
 
 require 't/common.pl';
 
@@ -51,8 +51,8 @@ if ( $create )
 {
   delete $deplist->{Attr};
   delete $targets->{Attr};
-  delete $Depends::self->{State}{Attr};
-  StoreFile( 'data/traverse', $deplist, $targets, $Depends::self->{State} );
+  delete $Decision::Depends::self->{State}{Attr};
+  StoreFile( 'data/traverse', $deplist, $targets, $Decision::Depends::self->{State} );
 }
 
 my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );
@@ -61,11 +61,11 @@ my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );
 # debugging things tough
 delete $deplist->{Attr};
 delete $targets->{Attr};
-delete $Depends::self->{State}{Attr};
+delete $Decision::Depends::self->{State}{Attr};
 
 ok( eq_hash( $c_deplist, $deplist ), "Dependency list" );
 ok( eq_array( $c_targets, $targets ), "Targets" );
-ok( eq_hash( $c_state, $Depends::self->{State} ), "State" );
+ok( eq_hash( $c_state, $Decision::Depends::self->{State} ), "State" );
 
 #---------------------------------------------------
 
@@ -76,10 +76,10 @@ sub submit
 {
   my ( @specs ) = @_;
 
-  Depends::Configure( { Verbose => $verbose } );
+  Decision::Depends::Configure( { Verbose => $verbose } );
 
-  my @res = $Depends::self->_build_spec_list( undef, undef, \@specs );
-  my ( $deplist, $targets ) = $Depends::self->_traverse_spec_list( @res );
+  my @res = $Decision::Depends::self->_build_spec_list( undef, undef, \@specs );
+  my ( $deplist, $targets ) = $Decision::Depends::self->_traverse_spec_list( @res );
 }
 
 

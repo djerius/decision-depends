@@ -4,8 +4,8 @@ use warnings;
 use Test::More;
 plan( tests => 6);
 
-use Depends;
-use Depends::Var;
+use Decision::Depends;
+use Decision::Depends::Var;
 
 require 't/common.pl';
 require 't/depends.pl';
@@ -57,12 +57,12 @@ eval {
   cleanup();
   mkfile( 'data/sig1', 'contents' );
   touch( 'data/targ1', 'data/sig1' );
-  my $sig = Depends::Sig::mkSig( 'data/sig1' );
+  my $sig = Decision::Depends::Sig::mkSig( 'data/sig1' );
 
   ( $deplist, $targets, $deps ) =
     submit ( -target => 'data/targ1',
 	     -sig    => 'data/sig1',
-	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
+	     sub { $Decision::Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
 					    $sig ) }
 	     );
 
@@ -79,14 +79,14 @@ eval {
   cleanup();
   mkfile( 'data/sig1', 'contents' );
   touch( 'data/targ1', 'data/sig1' );
-  my $sig = Depends::Sig::mkSig( 'data/sig1' );
+  my $sig = Decision::Depends::Sig::mkSig( 'data/sig1' );
 
   mkfile( 'data/sig1', 'contents2' );
 
   ( $deplist, $targets, $deps ) =
     submit ( -target => 'data/targ1',
 	     -sig    => 'data/sig1',
-	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1', 
+	     sub { $Decision::Depends::self->{State}->setSig( 'data/targ1', 'data/sig1', 
 					    $sig ) }
 	     );
 
@@ -108,12 +108,12 @@ eval {
   cleanup();
   mkfile( 'data/sig1', 'contents' );
   touch( 'data/targ1', 'data/sig1' );
-  my $sig = Depends::Sig::mkSig( 'data/sig1' );
+  my $sig = Decision::Depends::Sig::mkSig( 'data/sig1' );
 
   ( $deplist, $targets, $deps ) =
     submit ( -target => 'data/targ1',
 	     -force => -sig    => 'data/sig1',
-	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
+	     sub { $Decision::Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
 					    $sig ) }
 	     );
 
@@ -135,13 +135,13 @@ eval {
   cleanup();
   mkfile( 'data/sig1', 'contents' );
   touch( 'data/targ1', 'data/sig1' );
-  my $sig = Depends::Sig::mkSig( 'data/sig1' );
+  my $sig = Decision::Depends::Sig::mkSig( 'data/sig1' );
 
   ( $deplist, $targets, $deps ) =
     submit ( { Force => 1 },
              -target => 'data/targ1',
 	     -sig    => 'data/sig1',
-	     sub { $Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
+	     sub { $Decision::Depends::self->{State}->setSig( 'data/targ1', 'data/sig1',
 					    $sig ) }
 	     );
 

@@ -1,4 +1,4 @@
-package Depends::State;
+package Decision::Depends::State;
 
 require 5.005_62;
 use strict;
@@ -212,32 +212,3 @@ sub setVar
 }
 
 1;
-__END__
-# Below is stub documentation for your module. You better edit it!
-
-=head1 NAME
-
-Depends - Perl extension for blah blah blah
-
-=head1 SYNOPSIS
-
-  use Depends::State;
-
-
-=head1 DESCRIPTION
-
-
-=head2 EXPORT
-
-None by default.
-
-
-=head1 AUTHOR
-
-A. U. Thor, a.u.thor@a.galaxy.far.far.away
-
-=head1 SEE ALSO
-
-perl(1).
-
-=cut

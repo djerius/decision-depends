@@ -1,4 +1,4 @@
-package Depends::OO;
+package Decision::Depends::OO;
 
 require 5.005_62;
 use strict;
@@ -9,9 +9,9 @@ require Exporter;
 our $VERSION = '0.04';
 
 use Carp;
-use Depends::State;
-use Depends::List;
-use Depends::Target;
+use Decision::Depends::State;
+use Decision::Depends::List;
+use Decision::Depends::Target;
 
 # regular expression for a floating point number
 our $RE_Float = qr/^[+-]?(\d+[.]?\d*|[.]\d+)([dDeE][+-]?\d+)?$/;
@@ -32,7 +32,7 @@ sub new
 	     };
   bless $self, $class;
 
-  $self->{State} = Depends::State->new();
+  $self->{State} = Decision::Depends::State->new();
 
   $self->configure( @_ );
 
@@ -245,7 +245,7 @@ sub _traverse_spec_list
   # two phases; first the targets, then the dependencies.
   # the targets are identified as id 0.X
 
-  my $deplist = Depends::List->new( $self->{State} );
+  my $deplist = Decision::Depends::List->new( $self->{State} );
 
   my @targets;
 
@@ -256,7 +256,7 @@ sub _traverse_spec_list
       if ( (grep { exists $spec->{attr}{$_} } qw( target targets sfile slink )) ||
 	   (! exists $spec->{attr}{depend} && 0 == $spec->{id}[0] ) )
       {
-	push @targets, Depends::Target->new( $self->{State}, $spec );
+	push @targets, Decision::Depends::Target->new( $self->{State}, $spec );
       }
 
       else
@@ -270,7 +270,7 @@ sub _traverse_spec_list
 		 "::traverse_spec_list: too many classes for `$spec->{val}'" )
 	}
 
-	my $class = 'Depends::' .
+	my $class = 'Decision::Depends::' .
 	  ( @match ? ucfirst( $match[0]) : 'Time' );
 
 	$deplist->add( $class->new( $self->{State}, $spec ) );

@@ -4,8 +4,8 @@ use warnings;
 use Test::More;
 plan( tests => 5 );
 
-use Depends;
-use Depends::Var;
+use Decision::Depends;
+use Decision::Depends::Var;
 
 require 't/common.pl';
 require 't/depends.pl';
@@ -35,7 +35,7 @@ ok ( !$@ &&
     'non-existant status file' );
 
 eval {
-  $Depends::self->_update( $deplist, $targets );
+  $Decision::Depends::self->_update( $deplist, $targets );
 };
 print STDERR $@ if $@ && $verbose;
 ok ( !$@ && -f 'data/targ1', 
@@ -62,7 +62,7 @@ ok ( !$@ &&
      'non-existant status file' );
 
 eval {
-  $Depends::self->_update( $deplist, $targets );
+  $Decision::Depends::self->_update( $deplist, $targets );
 };
 print STDERR $@ if $@ && $verbose;
 ok ( !$@ && -f 'data/targ1', 

@@ -1,11 +1,15 @@
-Revision history for Perl extension Depends.
+Revision history for Perl extension Decision::Depends.
+
+0.10  Tue Dec 31 10:21:56 EST 2002
+        - release to CPAN.  Now called Decision::Depends.
+	  no more 'use Depends'. awww.
 
 0.09  Wed Apr 10 10:20:48 EDT 2002
         - variable dependencies now try to guess if the value is a
 	  number and perform a numeric comparison.  This may be
 	  forced or overridden with the new -numcmp and -strcmp attributes.
 	- documented variable dep. -case attribute.
-	- added Depends::OO::renew() for testing purposes.
+	- added Depends::renew() for testing purposes.
 	- removed dependency Attr hashes; they should all use State
 	  Attrs via State methods.
 		
