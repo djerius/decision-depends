@@ -105,7 +105,7 @@ sub if_dep
 
   my ( $args, $run ) = @_;
 
-  print STDERR "\nNew dependency\n" if $self->Verbose;
+  print STDOUT "\nNew dependency\n" if $self->Verbose;
 
   my @specs = $self->_build_spec_list( undef, undef, $args );
 
@@ -117,7 +117,7 @@ sub if_dep
   {
     # clean up beforehand in case of Pretend
     undef $@;
-    print STDERR "Action required.\n" if $self->Verbose;
+    print STDOUT "Action required.\n" if $self->Verbose;
     eval { &$run( $depends) } unless $self->Pretend;
     if ( $@ )
     {
@@ -131,7 +131,7 @@ sub if_dep
   }
   else
   {
-    print STDERR "No action required.\n" if $self->Verbose;
+    print STDOUT "No action required.\n" if $self->Verbose;
   }
   1;
 }
@@ -141,7 +141,7 @@ sub test_dep
   my $self = shift;
   my ( @args ) = @_;
 
-  print STDERR "\nNew dependency\n" if $self->Verbose;
+  print STDOUT "\nNew dependency\n" if $self->Verbose;
 
   my @specs = $self->_build_spec_list( undef, undef, \@args );
 

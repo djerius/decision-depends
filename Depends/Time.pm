@@ -76,12 +76,12 @@ sub depends
     # if time of dependency is greater than of target, it's younger
     if ( $is_not_equal )
     {
-      print STDERR "    file `$deptag' is younger\n" if $state->Verbose;
+      print STDOUT "    file `$deptag' is younger\n" if $state->Verbose;
       push @deps, $dep;
     }
     else
     {
-      print STDERR "    file `$deptag' is older\n" if $state->Verbose;
+      print STDOUT "    file `$deptag' is older\n" if $state->Verbose;
     }
   }
 

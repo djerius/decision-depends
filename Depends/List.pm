@@ -54,7 +54,7 @@ sub depends
 
   for my $target ( @$targets )
   {
-    print STDERR "  Target ", $target->file, "\n"
+    print STDOUT "  Target ", $target->file, "\n"
       if $self->Verbose;
 
     # keep track of changed dependencies
@@ -67,7 +67,7 @@ sub depends
 
     unless( defined $time )
     {
-      print STDERR "    target `", $target->file,
+      print STDOUT "    target `", $target->file,
       "' doesn't exist\n" if $self->Verbose;
 
       $depends{$target->file} = \%deps;
@@ -103,7 +103,7 @@ sub update
 
   for my $target ( @$targets )
   {
-    print STDERR ("Updating target ", $target->file, "\n" )
+    print STDOUT ("Updating target ", $target->file, "\n" )
       if $self->Verbose;
 
     $_->update( $target->file ) foreach @{$self->{list}};

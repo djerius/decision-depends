@@ -55,20 +55,20 @@ sub depends
 
     if ( $is_not_equal )
     {
-      print STDERR "    signature file `", $self->{val}, "' has changed\n"
+      print STDOUT "    signature file `", $self->{val}, "' has changed\n"
 	if $state->Verbose;
       push @deps, $self->{val};
     }
     else
     {
-      print STDERR "    signature file `", $self->{val}, "' is unchanged\n"
+      print STDOUT "    signature file `", $self->{val}, "' is unchanged\n"
 	if $state->Verbose;
     }
 
   }
   else
   {
-    print STDERR "    No signature on file for `", $self->{val}, "'\n"
+    print STDOUT "    No signature on file for `", $self->{val}, "'\n"
 	if $state->Verbose;
       push @deps, $self->{val};
   }

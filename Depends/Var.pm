@@ -85,7 +85,7 @@ sub depends
 
     if ( $is_not_equal )
     {
-      print STDERR 
+      print STDOUT 
 	"    variable `", $var, "' is now (", $self->{val},
 	"), was ($prev_val)\n"
 	  if $state->Verbose;
@@ -94,13 +94,13 @@ sub depends
     }
     else
     {
-      print STDERR "    variable `", $var, "' is unchanged\n"
+      print STDOUT "    variable `", $var, "' is unchanged\n"
 	if $state->Verbose;
     }
   }
   else
   {
-    print STDERR "    No value on file for variable `", $var, "'\n"
+    print STDOUT "    No value on file for variable `", $var, "'\n"
 	if $state->Verbose;
       push @deps, $var;
   }

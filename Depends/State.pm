@@ -105,7 +105,7 @@ sub DumpAll
 {
   my $self = shift;
 
-  print STDERR YAML::Store($self);
+  print STDOUT YAML::Store($self);
 }
 
 sub Verbose

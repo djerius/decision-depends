@@ -27,7 +27,7 @@ action
 test_dep
 );
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Carp;
 use Decision::Depends::OO;
@@ -138,7 +138,7 @@ C<Pretend> attribute to B<Decision::Depends::Configure>.  In this mode
 no actions are actually performed, but are assumed to have
 successfully created their products.
 
-B<Decision::Depends> will output to STDERR its musings if the
+B<Decision::Depends> will output to STDOUT its musings if the
 C<Verbose> attribute is passed to B<Decision::Depends::Configure>.
 
 To simply test if a dependency exists, without requiring that an
