@@ -27,7 +27,7 @@ action
 test_dep
 );
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use Carp;
 use Depends::OO;
@@ -413,18 +413,21 @@ ref).  For example:
 
 =item Depends::Configure
 
-  Depends::Configure( \%attr )
+This routine sets various attributes which control B<Depends>
+behavior, including the file to which B<Depends> writes its dependency
+information. Attributes are option-value pairs, and may be passed as
+lists of pairs, arrayrefs (containing pairs), or hashrefs (or any mix
+thereof):
 
-This routine sets the file to which B<Depends> writes its dependency
-information, as well as various attributes to control B<Depends>
-behavior.  
-
+  @attr2 = ( $attr => $value );
+  $attr{$attr} = $value;
+  Depends::Configure( \%attr, $attr => $value, \@attr );
+  
 A dependency file is not required if there are no signature or
 variable dependencies.  In that case, if no attributes need be set,
 this routine need not be called at all. 
 
-The attributes are passed via a hash, with the following recognized
-keys:
+The available attributes are 
 
 =over 8
 
