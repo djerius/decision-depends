@@ -21,8 +21,6 @@ sub new
   my $class = shift;
   $class = ref($class) || $class;
 
-  my $attr = shift;
-
   my $self = { Attr => { Cache => 0,
 			 DumpFiles => 0,
 			 Pretend => 0,
@@ -34,30 +32,59 @@ sub new
 	     };
   bless $self, $class;
 
-  $self->configure( $attr );
+  $self->{State} = Depends::State->new();
 
-  $self->{State} = Depends::State->new( $attr );
+  $self->configure( @_ );
 
   $self;
 }
 
 sub configure
 {
-  my ( $self, $attr ) = @_;
+  my $self = shift;
 
-  return unless defined $attr;
+  return unless @_;
 
-  croak( __PACKAGE__, '->Configure: attribute not a hash ref')
-	 unless 'HASH' eq ref $attr;
-
-  my @notok = grep { ! exists $self->{Attr}{$_} } keys %$attr;
-  croak( __PACKAGE__, '->Configure: unknown attribute(s): ',
-	 join( ', ', @notok) ) if @notok;
-
+  my @opts = @_;
+  my %attr;
   my ($key, $val);
-  $self->{Attr}{$key} = $val while( ($key, $val) = each %$attr );
 
-  $self->{State}->SetAttr( $attr );
+  while ( @opts )
+  {
+    my $opt = shift @opts;
+
+    if ( 'HASH' eq ref $opt )
+    {
+      my @notok = grep { ! exists $self->{Attr}{$_} } keys %$opt;
+      croak( __PACKAGE__, '->configure: unknown attribute(s): ',
+	     join( ', ', @notok) ) if @notok;
+      $attr{$key} = $val while( ($key, $val) = each %$opt );
+    }
+
+    elsif ( 'ARRAY' eq ref $opt )
+    {
+      croak( __PACKAGE__, '->configure: odd number of elements in arrayref' )
+	if @$opt %2;
+
+      unshift @opts, @$opt;
+    }
+
+    else
+    {
+      croak( __PACKAGE__, 
+	     '->configure: odd number of elements in options list' )
+	unless @opts;
+
+      croak( __PACKAGE__, "->configure: unknown attribute: `$opt'" )
+	unless exists $self->{Attr}{$opt};
+
+      $attr{$opt} = shift @opts;
+    }
+
+  }
+
+  $self->{Attr}{$key} = $val while( ($key, $val) = each %attr );
+  $self->{State}->SetAttr( \%attr );
 }
 
 sub if_dep
