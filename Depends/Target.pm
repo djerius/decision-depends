@@ -10,6 +10,7 @@ our $VERSION = '0.01';
 
 our %attr = ( target => 1,
 	      targets => 1,
+	      force => 0,
 	      sfile => 1,
 	      slink => 1,
 	    );
@@ -104,11 +105,8 @@ sub mkSFile
   close FILE;
 }
 
-sub file
-{
-  my $self = shift;
+sub file { $_[0]{val} }
 
-  $self->{val};
-}
+sub force { $_[0]{attr}{force} }
 
 1;

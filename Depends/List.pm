@@ -67,7 +67,7 @@ sub depends
 
     unless( defined $time )
     {
-      print STDERR "    target `", $target->file, 
+      print STDERR "    target `", $target->file,
       "' doesn't exist\n" if $self->Verbose;
 
       $depends{$target->file} = \%deps;
@@ -83,7 +83,10 @@ sub depends
       my $ndeps = 0;
       map { $ndeps += @{$deps{$_}} } qw( var time sig );
 
-      $depends{$target->file} = \%deps if $ndeps;
+      # return list of dependencies.  if there are none, return
+      # the empty hash if force is one
+      $depends{$target->file} = \%deps
+	if $ndeps or $target->force || $self->{state}->Force;
     }
   }
 

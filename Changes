@@ -1,5 +1,9 @@
 Revision history for Perl extension Decision::Depends.
 
+0.12  Sat Jan 11 00:39:02 EST 2003
+        - Force had no effect if a target had no dependencies.
+	- added force attribute to targets
+
 0.11  Tue Dec 31 10:56:58 EST 2002
         - Yikes. was developing with older version of YAML;
 	  latest version has DumpFile, not StoreFile.

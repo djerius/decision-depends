@@ -27,7 +27,7 @@ action
 test_dep
 );
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 use Carp;
 use Decision::Depends::OO;
@@ -233,6 +233,14 @@ for the final step.
 
 The target status file will be automatically created upon successful
 completion of the step.
+
+=item C<-force>
+
+If set to non-zero (the default if no value is specified), this will
+force the target to always be out-of-date.  This can be used to
+override a global forcing of out-of-dateness (done via the
+B<Depend::Configure> function) by setting it to zero.  It is probably
+most useful for targets which have no dependencies.
 
 =back
 
