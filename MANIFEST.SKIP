@@ -10,3 +10,5 @@
 CVS/
 ^pm_to_blib
 GNUmakefile
+.tar$
+.tar.gz$

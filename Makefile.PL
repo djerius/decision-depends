@@ -5,7 +5,7 @@ WriteMakefile(
     'NAME'		=> 'Depends',
     'VERSION_FROM'	=> 'Depends.pm', # finds $VERSION
     'PMLIBDIRS'		=> [ 'Depends' ],
-    'PREREQ_PM'		=> { Data::Denter => 0,
+    'PREREQ_PM'		=> { YAML => 0,
 			     Test::More => 0,
 			   }, # e.g., Module::Name => 1.1
 );

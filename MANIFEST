@@ -6,8 +6,10 @@ Depends/State.pm
 Depends/Target.pm
 Depends/Time.pm
 Depends/Var.pm
+LICENSE
 MANIFEST
 Makefile.PL
+README
 data/deps
 data/parse
 data/traverse
