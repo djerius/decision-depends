@@ -1,6 +1,0 @@
---- #YAML:1.0
-Files: {}
-Sig: ~
-Var:
-  data/targ1:
-    foo: val

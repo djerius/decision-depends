@@ -1,6 +1,6 @@
-		      =========================
-		      Decision::Depends v. 0.12
-		      =========================
+			  =================
+			  Decision::Depends
+			  =================
 
 NAME
     Decision::Depends - Perform actions based upon file dependencies
@@ -56,6 +56,13 @@ CAVEATS
     change (in particular, don't use $Decision::Depends::self).
 
 CHANGES
+
+    0.15
+    ----
+      dependency lists may now use hashrefs to associate attribute
+      values with ordinary values.  this can be used to greatly
+      simplify the set up of variable dependencies
+
 
     Major changes only. See the Changes file for more details.
 
