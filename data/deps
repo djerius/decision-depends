@@ -2,5 +2,5 @@
 Files: {}
 Sig: ~
 Var:
- data/targ1:
-  foo: val
+  data/targ1:
+    foo: val

@@ -4,7 +4,7 @@ use warnings;
 use Test::More tests => 1;
 
 use Decision::Depends;
-use YAML qw( StoreFile LoadFile );
+use YAML qw( DumpFile LoadFile );
 
 our $create = 0;
 
@@ -18,7 +18,7 @@ my @specs = (
 
 my @res = $Decision::Depends::self->_build_spec_list( undef, undef, \@specs );
 
-StoreFile( 'data/parse', \@res )
+DumpFile( 'data/parse', \@res )
   if $create;
 
 my $c_res = LoadFile( 'data/parse' );

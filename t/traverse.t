@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More;
 plan(  tests => 5 );
-use YAML qw( StoreFile LoadFile );
+use YAML qw( DumpFile LoadFile );
 
 our $verbose = 0;
 our $create = 0;
@@ -52,7 +52,7 @@ if ( $create )
   delete $deplist->{Attr};
   delete $targets->{Attr};
   delete $Decision::Depends::self->{State}{Attr};
-  StoreFile( 'data/traverse', $deplist, $targets, $Decision::Depends::self->{State} );
+  DumpFile( 'data/traverse', $deplist, $targets, $Decision::Depends::self->{State} );
 }
 
 my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );

@@ -88,7 +88,7 @@ sub SaveState
 
   return if $self->{Attr}{Pretend} || !defined $self->{Attr}{File};
 
-  YAML::StoreFile( $self->{Attr}{File},
+  YAML::DumpFile( $self->{Attr}{File},
 		   { 
 		    Sig => $self->{Sig}, 
 		    Var => $self->{Var}, 

@@ -1,5 +1,10 @@
 Revision history for Perl extension Decision::Depends.
 
+0.11  Tue Dec 31 10:56:58 EST 2002
+        - Yikes. was developing with older version of YAML;
+	  latest version has DumpFile, not StoreFile.
+	  require YAML 0.35
+
 0.10  Tue Dec 31 10:21:56 EST 2002
         - release to CPAN.  Now called Decision::Depends.
 	  no more 'use Depends'. awww.
