@@ -27,7 +27,7 @@ action
 test_dep
 );
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use Carp;
 use Decision::Depends::OO;
@@ -39,6 +39,8 @@ sub if_dep(&@)
   my ( $deps, $run ) = @_;
   my @args = &$deps;
 
+  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
+
   $self->if_dep( \@args, $run );
 }
 
@@ -46,11 +48,15 @@ sub action(&) { $_[0] }
 
 sub test_dep
 {
+  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
+
   $self->test_dep( @_ );
 }
 
 sub Configure
 {
+  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
+
   $self->configure( @_ );
 }
 

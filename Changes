@@ -1,5 +1,8 @@
 Revision history for Perl extension Decision::Depends.
 
+0.13  Tue Jan 21 13:54:33 EST 2003
+        - needed to bump up Carp::CarpLevel at the Depends.pm level.
+
 0.12  Sat Jan 11 00:39:02 EST 2003
         - Force had no effect if a target had no dependencies.
 	- added force attribute to targets
