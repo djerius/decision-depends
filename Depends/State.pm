@@ -4,7 +4,7 @@ require 5.005_62;
 use strict;
 use warnings;
 
-use Data::Denter;
+use YAML qw();
 use IO::File;
 use Carp;
 
@@ -69,12 +69,11 @@ sub LoadState
 
   $self->{File} = $file;
 
-  if ( defined $self->{File} and open( DEPS, $self->{File}) )
-  {
-    local $/ = undef;
-    ( $self->{Sig}, $self->{Var}, $self->{Files} ) = Undent(<DEPS>);
-    close( DEPS );
-  }
+  my $state = YAML::LoadFile($self->{File})
+      if defined && -f $self->{File};
+  $self->{Sig} = $state->{Sig};
+  $self->{Var} = $state->{Var};
+  $self->{Files} = $state->{Files}; 
 }
 
 sub SaveState
@@ -83,14 +82,15 @@ sub SaveState
 
   return if $self->{Attr}{Pretend} || !defined $self->{File};
 
-  open( DEPS, ">$self->{File}" )
-    or croak( __PACKAGE__, "->SaveState: error creating $self->{File}" );
-
-  print DEPS Indent( $self->{Sig}, $self->{Var}, 
-		     ( $self->{Attr}{DumpFiles} ? $self->{Files} : {} ) )
+  YAML::StoreFile( $self->{File},
+		   { 
+		    Sig => $self->{Sig}, 
+		    Var => $self->{Var}, 
+		    Files => 
+		      ( $self->{Attr}{DumpFiles} ? $self->{Files} : {} ) 
+		   } )
     or croak( __PACKAGE__, 
 	      "->SaveState: error writing state to $self->{File}" );
-  close DEPS;
 }
 
 sub DumpAll
@@ -180,7 +180,7 @@ sub getVar
   my ( $self, $target, $var ) = @_;
 
   # return undef if we have no record of this variable
-  exists $self->{Var}{$target}{$var} ? $self->{Var}{$target}{$var} : undef;
+  exists $self->{Var}{$target} && $self->{Var}{$target}{$var} ? $self->{Var}{$target}{$var} : undef;
 }
 
 

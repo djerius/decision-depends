@@ -10,6 +10,7 @@ use Digest::MD5;
 our $VERSION = '0.01';
 
 our %attr = ( depend => 1,
+	      depends => 1,
 	      sig => 1 );
 
 sub new

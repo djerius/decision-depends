@@ -10,6 +10,7 @@ use Carp;
 our $VERSION = '0.01';
 
 our %attr = ( target => 1,
+	      targets => 1,
 	      sfile => 1,
 	      slink => 1,
 	    );

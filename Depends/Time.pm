@@ -10,6 +10,7 @@ use File::stat;
 our $VERSION = '0.01';
 
 our %attr = ( depend => 1,
+	      depends => 1,
 	      time => 1,
 	      orig => 1 );
 

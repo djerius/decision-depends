@@ -9,6 +9,7 @@ use Carp;
 our $VERSION = '0.01';
 
 our %attr = ( depend => 1,
+	      depends => 1,
 	      var => 1,
 	      case => 1,
 	      no_case => 1,

@@ -26,7 +26,7 @@ if_dep
 action
 );
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Carp;
 use Depends::State;
@@ -173,6 +173,8 @@ sub traverse_spec_list
 {
   my @list = @_;
 
+  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
+
   # two phases; first the targets, then the dependencies.
   # the targets are identified as id 0.X
 
@@ -185,7 +187,7 @@ sub traverse_spec_list
 
     for my $spec ( @list )
     {
-      if ( (grep { exists $spec->{attr}{$_} } qw( target sfile slink )) ||
+      if ( (grep { exists $spec->{attr}{$_} } qw( target targets sfile slink )) ||
 	   (! exists $spec->{attr}{depend} && 0 == $spec->{id}[0] ) )
       {
 	push @targets, Depends::Target->new( $State, $spec );
@@ -193,9 +195,12 @@ sub traverse_spec_list
 
       elsif ( my @match = grep { defined $spec->{attr}{$_} } qw( sig var ) )
       {
-	croak( __PACKAGE__, 
-	       "::traverse_spec_list: too many classes for `$spec->{val}'" )
-	  if @match > 1;
+	if ( @match > 1 )
+	{
+	  $Carp::CarpLevel--;
+	  croak( __PACKAGE__, 
+		 "::traverse_spec_list: too many classes for `$spec->{val}'" )
+	}
 
 	$deplist->create( $match[0], $spec );
       }
@@ -351,10 +356,10 @@ them.
 
 =head2 Targets
 
-Targets are identified either by having the C<-target> attribute, or
-by being the first value (or group) in the target-dependency list and
-not having the C<-depend> attribute.  For example, the following are
-equivalent
+Targets are identified either by having the C<-target> or C<-targets>
+attributes, or by being the first value (or group) in the
+target-dependency list and not having the C<-depend> attribute.  For
+example, the following are equivalent
 
 	( -target => $targ1, -target => $targ2, ... )
 	( -target => [ $targ1, $targ2 ], ... )
@@ -403,10 +408,10 @@ completion of the step.
 
 =head2 Dependencies
 
-Dependencies are identified either as I<not> being the first value
-(or group) in the list and not having the C<-target> attribute,
-or by having the attribute C<-depend>.  There need not be any
-dependencies.
+Dependencies are identified either as I<not> being the first value (or
+group) in the list and not having the C<-target> attribute, or by
+having the attributes C<-depend> or C<-depends>.  There need not be
+any dependencies.
 
 There are three types of dependencies: I<time>, I<signature>, and
 I<variable>.  The default type is I<time>.  The defining attributes

@@ -44,6 +44,7 @@ sub create
  ( my $class = __PACKAGE__) =~ s/\w+$/\u$type/;
 
 
+  local $Carp::CarpLevel = $Carp::CarpLevel + 1;
   push @{$self->{list}}, $class->new( $self->{state}, @_ );
 
   print STDERR "Creating $class (", $self->{list}[-1]->pprint, ")\n"
