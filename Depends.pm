@@ -27,7 +27,7 @@ action
 test_dep
 );
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 use Carp;
 use Decision::Depends::OO;

@@ -60,7 +60,6 @@ my ( $c_deplist, $c_targets, $c_state ) = LoadFile( 'data/traverse' );
 # must rid ourselves of those pesky attributes, as it makes
 # debugging things tough
 delete $deplist->{Attr};
-delete $targets->{Attr};
 delete $Decision::Depends::self->{State}{Attr};
 
 ok( eq_hash( $c_deplist, $deplist ), "Dependency list" );

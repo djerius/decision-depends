@@ -1,5 +1,11 @@
 Revision history for Perl extension Decision::Depends.
 
+0.17  Tue Sep 20 15:46:20 EDT 2005
+        - Test::More::eq_hash (v0.6) is more thorough than v0.47,
+	  which broke t/sig.t
+	- useless (and incorrect) deletion of attributes in t/traverse.t
+	  led to warning
+
 0.16  Sun Jul 13 16:15:43 EDT 2003
         - verbose output is sent to STDOUT now.
 

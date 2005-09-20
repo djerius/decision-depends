@@ -25,7 +25,6 @@ eval {
 	     -sig    => 'data/sig1'
 	     );
 };
-print STDERR $@ if $@ && $verbose;
 ok( $@ && $@ =~ /non-existant signature/,
 	 'non-existant signature file' );
 
@@ -41,14 +40,14 @@ eval {
 	     -sig    => 'data/sig1'
 	     );
 };
-print STDERR $@ if $@ && $verbose;
 ok ( !$@ && 
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [],
 					time   => [],
 					sig    => [ 'data/sig1' ] }
 		     } ),
-     'no signature on file' );
+     'no signature on file' )
+     or diag( $@ );
 
 #---------------------------------------------------
 
@@ -67,10 +66,9 @@ eval {
 	     );
 
 };
-print STDERR $@ if $@ && $verbose;
 ok ( !$@ && 
      eq_hash( $deps, { } ),
-     'same signature on file' );
+     'same signature on file' ) or diag($@);
 
 #---------------------------------------------------
 
@@ -91,15 +89,13 @@ eval {
 	     );
 
 };
-print STDERR $@ if $@ && $verbose;
 ok ( !$@ && 
-     eq_hash( $deps, { 'data/targ1' => { target => [],
-					 var    => [],
+     eq_hash( $deps, { 'data/targ1' => { var    => [],
 					 time   => [],
 					 sig    => [ 'data/sig1' ] }
 		     } 
 	    ),
-     'different signature on file' );
+     'different signature on file' ) or diag ($@);
 
 #---------------------------------------------------
 
@@ -118,15 +114,13 @@ eval {
 	     );
 
 };
-print STDERR $@ if $@ && $verbose;
 ok ( !$@ && 
-     eq_hash( $deps, { 'data/targ1' => { target => [],
-					 var    => [],
+     eq_hash( $deps, { 'data/targ1' => { var    => [],
 					 time   => [],
 					 sig    => [ 'data/sig1' ] }
 		     } 
 	    ),
-     'local force signature dependency' );
+     'local force signature dependency' ) or diag($@);
 
 #---------------------------------------------------
 
@@ -146,15 +140,13 @@ eval {
 	     );
 
 };
-print STDERR $@ if $@ && $verbose;
 ok ( !$@ && 
-     eq_hash( $deps, { 'data/targ1' => { target => [],
-					 var    => [],
+     eq_hash( $deps, { 'data/targ1' => { var    => [],
 					 time   => [],
 					 sig    => [ 'data/sig1' ] }
 		     } 
 	    ),
-     'global force signature dependency' );
+     'global force signature dependency' ) or diag($@);
 
 #---------------------------------------------------
 
