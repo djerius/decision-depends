@@ -1,0 +1,245 @@
+2008-02-26 06:48 +0000  convert-repo  <convert-repo>  (58603e2e6f3b [tip])
+
+	* .hgtags:
+	update tags
+
+2005-09-20 15:52 -0400  dj  <dj>  (b142d62b45a8 [V0_17])
+
+	* MANIFEST:
+	*** empty log message ***
+
+2005-09-20 15:49 -0400  dj  <dj>  (24aa7bfa9152)
+
+	* Changes, Depends.pm, t/sig.t, t/traverse.t:
+	Test::More::eq_hash (v0.6) is more thorough than v0.47, which broke
+	t/sig.t
+
+	useless (and incorrect) deletion of attributes in t/traverse.t led
+	to warning
+
+2003-07-13 23:21 -0400  dj  <dj>  (c10f5a346d82 [V0_16])
+
+	* Depends/OO.pm:
+	*** empty log message ***
+
+2003-07-13 16:17 -0400  dj  <dj>  (110f84ac02d5)
+
+	* Changes, Depends.pm, Depends/List.pm, Depends/OO.pm, Depends/Sig.pm,
+	Depends/State.pm, Depends/Time.pm, Depends/Var.pm:
+	verbose logging goes to STDOUT instead of STDERR
+
+2003-06-26 13:47 -0400  dj  <dj>  (e3470c348c6d [V0_15])
+
+	* GNUmakefile, GNUmakefile.local, MANIFEST, README, data/deps,
+	data/parse:
+	*** empty log message ***
+
+2003-06-26 13:46 -0400  dj  <dj>  (8fac20f77b19)
+
+	* Changes, Depends.pm, Depends/OO.pm, Depends/Var.pm, Makefile.PL:
+	- added hash ref means of associating attribute values and
+	ordinary values
+	- modified variable dependencies so can find name of variable in
+	attribute value. this allows easy specification of variable names
+	and values via the hashref method above.
+
+2003-06-26 13:31 -0400  dj  <dj>  (068d6287a394)
+
+	* t/parse.t, t/var.t:
+	tests for setting variable dependency variable name
+
+2003-01-22 00:19 -0500  dj  <dj>  (ed619959889b)
+
+	* Changes, Depends.pm, Depends/OO.pm, Depends/State.pm:
+	- AutoSave option was undocumented and no longer needed.
+	- Added warning about absolute path for dependency file to docs.
+
+2003-01-21 13:55 -0500  dj  <dj>  (7eb5b82e238d [V0_13])
+
+	* Changes, Depends.pm:
+	needed to bump up Carp::CarpLevel
+
+2003-01-11 00:48 -0500  dj  <dj>  (2d2e31610009 [V0_12])
+
+	* GNUmakefile:
+	*** empty log message ***
+
+2003-01-11 00:45 -0500  dj  <dj>  (4446c15c99a5)
+
+	* Changes, Depends.pm, Depends/List.pm, Depends/Target.pm, README:
+	- Force had no effect if a target had no dependencies.
+	- added force attribute to targets
+
+2002-12-31 11:00 -0500  dj  <dj>  (89f17f9ebbdd [V0_11])
+
+	* Changes, Depends.pm, Depends/State.pm, Makefile.PL, data/deps,
+	t/parse.t, t/traverse.t:
+	upgraded to new YAML; renamed StoreFile to DumpFile
+
+2002-12-31 10:24 -0500  dj  <dj>  (f13db5b66954)
+
+	* Changes, Depends.pm, Depends/List.pm, Depends/OO.pm, Depends/Sig.pm,
+	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
+	Depends/Var.pm, Makefile.PL, README, t/common.pl, t/depends.pl,
+	t/depends.t, t/if_dep.t, t/parse.t, t/pretend.t, t/sfile.t, t/sig.t,
+	t/time.t, t/time_test_dep.t, t/traverse.t, t/var.t:
+	rename to Decision::Depends. documentation fixes
+
+2002-04-10 12:20 -0400  dj  <dj>  (e4dfdbeda01e [V0_09])
+
+	* Depends/List.pm, Depends/OO.pm:
+	*** empty log message ***
+
+2002-04-10 10:39 -0400  dj  <dj>  (224d96d204d0)
+
+	* Depends/List.pm, Depends/OO.pm, Depends/Sig.pm, Depends/State.pm,
+	Depends/Time.pm, Depends/Var.pm:
+	- variable dependencies now try to guess if the value is a number
+	and perform a numeric comparison. This may be forced or
+	overridden with the new -numcmp and -strcmp attributes.
+	- documented variable dep. -case attribute.
+	- removed dependency Attr hashes; they should all use State Attrs
+	via State methods.
+
+2002-04-10 10:38 -0400  dj  <dj>  (9af284886a14)
+
+	* Depends.pm:
+	added renew() for debugging/testing new docs for -numcmp -strcmp
+
+2002-04-10 10:36 -0400  dj  <dj>  (5f0a81246f7c)
+
+	* Changes:
+	*** empty log message ***
+
+2002-04-10 10:36 -0400  dj  <dj>  (bd09a60c1fd6)
+
+	* Changes, README, t/common.pl, t/time_test_dep.t, t/traverse.t,
+	t/var.t:
+	*** empty log message ***
+
+2002-04-02 01:21 -0500  dj  <dj>  (33a3a6af2c62)
+
+	* Changes, Depends.pm, Depends/Time.pm:
+	test for dependency existance in Time->new didn't check the State
+	cache (good when Pretend => 1 ). it seems to be a duplicate check,
+	as it's also done (correctly) in Time->depends. So, yank the check
+	in new().
+
+2002-04-01 18:56 -0500  dj  <dj>  (ddadf88c65f7 [V0_07])
+
+	* Depends/Target.pm:
+	mkSFile wasn't correctly updating the modify time if the sfile
+	already existed.
+
+2002-04-01 18:55 -0500  dj  <dj>  (9b01fb9af67b)
+
+	* Changes, Depends/List.pm:
+	*** empty log message ***
+
+2002-04-01 17:17 -0500  dj  <dj>  (f177e6261ae2)
+
+	* Depends/List.pm:
+	cleaned up formatting a bit
+
+2002-04-01 10:41 -0500  dj  <dj>  (25d76df57f91)
+
+	* Depends/OO.pm:
+	- configure is more flexible in regards to the form of its
+	arguments
+	- OO::new was calling (via configure) $self->{State}->SetAttr before
+	$self->{State} was created.
+
+2002-04-01 10:40 -0500  dj  <dj>  (d77c53117d48)
+
+	* Depends.pm:
+	- configure is more flexible in regards to the form of its
+	arguments
+
+2002-04-01 10:40 -0500  dj  <dj>  (af9abd33bbc7)
+
+	* Changes, t/traverse.t:
+	*** empty log message ***
+
+2002-03-29 10:30 -0500  dj  <dj>  (51deeb315de9 [V0_06])
+
+	* Depends/Sig.pm, Depends/Target.pm:
+	*** empty log message ***
+
+2002-03-27 20:27 -0500  dj  <dj>  (5274a7f23bb0)
+
+	* Changes, Depends.pm, Depends/State.pm:
+	State->getVar was incorrectly treating variables with values of 0 as
+	being undefined. oops.
+
+2002-03-25 17:10 -0500  dj  <dj>  (368861f20665 [V0_05])
+
+	* data/deps, data/traverse, t/bogus.t, t/common.pl, t/depends.pl,
+	t/depends.t, t/if_dep.t, t/parse.t, t/pretend.t, t/sfile.t, t/sig.t,
+	t/time.t, t/time_test_dep.t, t/traverse.t, t/var.t:
+	*** empty log message ***
+
+2002-03-25 17:10 -0500  dj  <dj>  (28e5bf685af7)
+
+	* Changes, Depends.pm, Depends/List.pm, Depends/OO.pm, Depends/Sig.pm,
+	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
+	Depends/Var.pm, GNUmakefile, MANIFEST, README:
+	- first recasting of top level Depends interface into OO module by
+	moving most of the front end code into Depends::OO. Depends.pm now
+	is just a wrapper around Depends::OO.
+
+	- Depends::init superceded by Depends::Configure.
+
+	- added Force and -force global and local attributes to force
+	dependencies to be out of date.
+
+	- no longer use File::stat, as it causes conniptions for testing
+	under 5.6.1.
+
+2002-03-07 16:52 -0500  dj  <dj>  (a15c5bc49f0b [V0_03])
+
+	* Changes, Depends.html, Depends.pm, Depends/List.pm, Depends/Sig.pm,
+	Depends/Time.pm, Depends/Var.pm:
+	- further message tweaks.
+	- Verbose > 4 gives object creation messages.
+	- must have broken non-existant signature and variable code, cause
+	it didn't work. does now.
+
+2002-03-06 18:51 -0500  dj  <dj>  (31e908db544d [V0_02])
+
+	* Depends/State.pm:
+	fixed bogus introduced bug
+
+2002-03-06 14:46 -0500  dj  <dj>  (4b2ca2eda2dd)
+
+	* Depends/State.pm, data/deps, data/parse, data/traverse, t/depends.t,
+	t/if_dep.t, t/parse.t, t/sfile.t, t/sig.t, t/time.t, t/traverse.t:
+	More Denter Cleaning
+
+2002-03-06 14:27 -0500  dj  <dj>  (dd4d8ff64063)
+
+	* Changes, Depends.pm, Depends/List.pm, Depends/Sig.pm,
+	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
+	Depends/Var.pm:
+	- uses YAML instead of Data::Denter, as had corruption problems
+	with the latter
+	- minor error message tweaks
+
+2002-03-06 14:26 -0500  dj  <dj>  (02f6bbc4a9c2)
+
+	* LICENSE, MANIFEST, MANIFEST.SKIP, Makefile.PL, README:
+	*** empty log message ***
+
+2002-03-06 09:15 -0500  dj  <dj>  (24e774a719ce [V0_01])
+
+	* 
+
+2002-03-06 09:15 -0500  dj  <dj>  (cb4e4c16b651)
+
+	* Changes, Depends.html, Depends.pm, Depends/List.pm, Depends/Sig.pm,
+	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
+	Depends/Var.pm, MANIFEST, MANIFEST.SKIP, Makefile.PL, data/deps,
+	data/parse, data/traverse, t/bogus.t, t/common.pl, t/depends.pl,
+	t/depends.t, t/if_dep.t, t/parse.t, t/pretend.t, t/sfile.t, t/sig.t,
+	t/time.t, t/traverse.t, t/var.t:
+	Initial revision
+
