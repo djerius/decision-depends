@@ -313,13 +313,13 @@ sub _traverse_spec_list
 
       else
       {
-	my @match = grep { defined $spec->{attr}{$_} } qw( sig var ) ;
+	my @match = grep { defined $spec->{attr}{$_} } qw( sig var time ) ;
 
 	if ( @match > 1 )
 	{
 	  $Carp::CarpLevel--;
 	  croak( __PACKAGE__, 
-		 "::traverse_spec_list: too many classes for `$spec->{val}'" )
+		 "::traverse_spec_list: too many dependency classes for `$spec->{val}'" )
 	}
 
 	my $class = 'Decision::Depends::' .
