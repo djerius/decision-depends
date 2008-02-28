@@ -1,8 +1,31 @@
+# --8<--8<--8<--8<--
+#
+# Copyright (C) 2008 Smithsonian Astrophysical Observatory
+#
+# This file is part of Decision::Depends
+#
+# Decision-Depends is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# -->8-->8-->8-->8--
+
 package Decision::Depends::State;
 
 require 5.005_62;
 use strict;
 use warnings;
+
+## no critic ( ProhibitAccessOfPrivateData )
 
 use YAML qw();
 use IO::File;
@@ -31,7 +54,7 @@ sub new
 
   bless $self, $class;
 
-  my $attr = pop @_ if 'HASH' eq ref $_[-1];
+  my $attr = 'HASH' eq ref $_[-1] ? pop @_ : {} ;
 
   my ( $file ) = @_;
 
@@ -67,8 +90,9 @@ sub LoadState
 
   my $file = $self->{Attr}{File};
 
-  my $state = YAML::LoadFile($file)
-      if defined $file && -f $file;
+  my $state = defined $file && -f $file
+    ? YAML::LoadFile($file)
+    : { map { $_ => {} } qw( Sig Var Files ) };
 
   $self->{SLink} = {};
   $self->{Sig} = $state->{Sig};

@@ -1,3 +1,24 @@
+# --8<--8<--8<--8<--
+#
+# Copyright (C) 2008 Smithsonian Astrophysical Observatory
+#
+# This file is part of Decision::Depends
+#
+# Decision-Depends is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# -->8-->8-->8-->8--
+
 package Decision::Depends;
 
 require 5.005_62;
@@ -34,6 +55,7 @@ use Decision::Depends::OO;
 
 our $self = Decision::Depends::OO->new();
 
+## no critic ( ProhibitSubroutinePrototypes )
 sub if_dep(&@)
 {
   my ( $deps, $run ) = @_;
@@ -566,16 +588,43 @@ stead
   if_dep \&targdep 
     action \&actions;
 
+=head1 BUGS AND LIMITATIONS
 
-=head1 LICENSE
+=for author to fill in:
+    A list of known problems with the module, together with some
+    indication Whether they are likely to be fixed in an upcoming
+    release. Also a list of restrictions on the features the module
+    does provide: data types that cannot be handled, performance issues
+    and the circumstances in which they may arise, practical
+    limitations on the size of data sets, special cases that are not
+    (yet) handled, etc.
 
-This software is released under the GNU General Public License.  You
-may find a copy at 
+No bugs have been reported.
 
-   http://www.fsf.org/copyleft/gpl.html
+Please report any bugs or feature requests to
+C<bug-decision-depends@rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Decision-Depends>.
+
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (c) 2008 The Smithsonian Astrophysical Observatory
+
+Decision::Depends is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 AUTHOR
 
-Diab Jerius (djerius@cpan.org)
+Diab Jerius  E<lt>djerius@cpan.orgE<gt>
 
 =cut

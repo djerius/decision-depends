@@ -1,88 +1,88 @@
---- #YAML:1.0 !perl/hash:Depends::List
+--- !!perl/hash:Decision::Depends::List
 list:
- - !perl/hash:Depends::Time
+  - !!perl/hash:Decision::Depends::Time
+    attr:
+      depend: 1
+    id:
+      - 3
+      - 0
+    state: &1 !!perl/hash:Decision::Depends::State
+      Files: {}
+      SLink: {}
+      Sig: {}
+      Var: {}
+    val: data/dep1
+  - !!perl/hash:Decision::Depends::Time
+    attr:
+      depend: 1
+    id:
+      - 3
+      - 1
+    state: *1
+    val: data/dep2
+  - !!perl/hash:Decision::Depends::Var
+    attr:
+      case: 1
+      foobar: 1
+      var: foobar
+    id:
+      - 4
+      - 0
+    state: *1
+    val: value
+  - !!perl/hash:Decision::Depends::Sig
+    attr:
+      sig: 1
+    id:
+      - 5
+    state: *1
+    val: frank
+state: *1
+---
+- !!perl/hash:Decision::Depends::Target
+  Pretend: 0
   attr:
-   depend: 1
+    target: 1
   id:
-   - 3
-   - 0
-  state: &id001 !perl/hash:Depends::State
-   Files: ~
-   SLink: {}
-   Sig: ~
-   Var: ~
-  val: data/dep1
- - !perl/hash:Depends::Time
+    - 0
+    - 0
+  state: &1 !!perl/hash:Decision::Depends::State
+    Files: {}
+    SLink: {}
+    Sig: {}
+    Var: {}
+  val: targ1
+- !!perl/hash:Decision::Depends::Target
+  Pretend: 0
   attr:
-   depend: 1
+    target: 1
   id:
-   - 3
-   - 1
-  state: *id001
-  val: data/dep2
- - !perl/hash:Depends::Var
+    - 0
+    - 1
+  state: *1
+  val: targ2
+- !!perl/hash:Decision::Depends::Target
+  Pretend: 0
   attr:
-   case: 1
-   foobar: 1
-   var: foobar
+    sfile: 1
+    target: 1
   id:
-   - 4
-   - 0
-  state: *id001
-  val: value
- - !perl/hash:Depends::Sig
+    - 1
+    - 0
+  state: *1
+  val: targ3
+- !!perl/hash:Decision::Depends::Target
+  Pretend: 0
   attr:
-   sig: 1
+    slink: dep1
+    target: 1
   id:
-   - 5
-  state: *id001
-  val: frank
-state: *id001
---- #YAML:1.0
-- !perl/hash:Depends::Target
- Pretend: 0
- attr:
-  target: 1
- id:
-  - 0
-  - 0
- state: &id002 !perl/hash:Depends::State
-  Files: ~
-  SLink: {}
-  Sig: ~
-  Var: ~
- val: targ1
-- !perl/hash:Depends::Target
- Pretend: 0
- attr:
-  target: 1
- id:
-  - 0
-  - 1
- state: *id002
- val: targ2
-- !perl/hash:Depends::Target
- Pretend: 0
- attr:
-  sfile: 1
-  target: 1
- id:
-  - 1
-  - 0
- state: *id002
- val: targ3
-- !perl/hash:Depends::Target
- Pretend: 0
- attr:
-  slink: dep1
-  target: 1
- id:
-  - 2
-  - 0
- state: *id002
- val: targ4
---- #YAML:1.0 !perl/hash:Depends::State
-Files: ~
+    - 2
+    - 0
+  state: *1
+  val: targ4
+--- !!perl/hash:Decision::Depends::State
+Files: {}
 SLink: {}
-Sig: ~
-Var: ~
+Sig: {}
+Var: {}

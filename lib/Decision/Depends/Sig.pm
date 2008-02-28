@@ -1,3 +1,24 @@
+# --8<--8<--8<--8<--
+#
+# Copyright (C) 2008 Smithsonian Astrophysical Observatory
+#
+# This file is part of Decision::Depends
+#
+# Decision-Depends is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# -->8-->8-->8-->8--
+
 package Decision::Depends::Sig;
 
 require 5.005_62;
@@ -6,6 +27,9 @@ use warnings;
 
 use Carp;
 use Digest::MD5;
+use IO::File;
+
+## no critic ( ProhibitAccessOfPrivateData )
 
 our $VERSION = '0.01';
 
@@ -86,10 +110,10 @@ sub mkSig
 {
   my ( $file ) = @_;
 
-  open( SIG, $file )
+  my $fh = IO::File->new( $file, 'r' )
     or croak( __PACKAGE__, "->mkSig: non-existant signature file `$file'" );
 
-  Digest::MD5->new->addfile(\*SIG)->hexdigest;
+  Digest::MD5->new->addfile($fh)->hexdigest;
 }
 
 sub update

@@ -1,3 +1,24 @@
+# --8<--8<--8<--8<--
+#
+# Copyright (C) 2008 Smithsonian Astrophysical Observatory
+#
+# This file is part of Decision::Depends
+#
+# Decision-Depends is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# -->8-->8-->8-->8--
+
 package Decision::Depends::Target;
 
 require 5.005_62;
@@ -5,6 +26,10 @@ use strict;
 use warnings;
 
 use Carp;
+
+use IO::File;
+
+## no critic ( ProhibitAccessOfPrivateData )
 
 our $VERSION = '0.01';
 
@@ -100,9 +125,8 @@ sub mkSFile
   my $file = $self->{val};
 
   unlink $file;
-  open( FILE, ">$file" )
+  my $fh = IO::File->new( $file, 'w' )
     or croak( __PACKAGE__, "->mkSFile: unable to create file `$file'" );
-  close FILE;
 }
 
 sub file { $_[0]{val} }
