@@ -12,3 +12,4 @@ CVS/
 GNUmakefile
 .tar$
 .tar.gz$
+^\.hg

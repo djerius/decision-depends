@@ -29,7 +29,7 @@ require Exporter;
 
 ## no critic ( ProhibitAccessOfPrivateData )
 
-our $VERSION = '0.04';
+our $VERSION = '0.18';
 
 use Carp;
 use Scalar::Util qw( reftype );

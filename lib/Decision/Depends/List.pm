@@ -27,7 +27,7 @@ use warnings;
 
 use Carp;
 
-our $VERSION = '0.01';
+our $VERSION = '0.18';
 
 use Decision::Depends::Time;
 use Decision::Depends::Var;
