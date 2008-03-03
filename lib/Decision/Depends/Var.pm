@@ -20,6 +20,7 @@
 # -->8-->8-->8-->8--
 
 package Decision::Depends::Var;
+use Data::Compare ();
 
 require 5.005_62;
 use strict;
@@ -54,7 +55,6 @@ sub new
   # ensure that no bogus attributes are set
   my @notok = grep { ! exists $attr{$_} } keys %{$self->{attr}};
 
-
   # use the value of the var attribute if it's set (i.e. not 1)
   if ( '1' ne $self->{attr}{var} )
   {
@@ -78,6 +78,11 @@ sub new
 	 ": specify only one of the attributes `-numcmp' or `-strcmp'" )
     if exists $self->{attr}{numcmp} && exists $self->{attr}{strcmp};
 
+  # comparison attributes for arrays and hashes are not allowed
+  croak( __PACKAGE__,
+	 ": comparison attributes on variable dependencies on hash or arrays are not allowed" )
+    if ref($self->{attr}{var}) =~ m/^(HASH|ARRAY)$/
+           && grep { exists $self->{attr}{$_}} qw( case numcmp strcmp no_case );
 
   bless $self, $class;
 }
@@ -99,9 +104,9 @@ sub depends
     my $is_not_equal = 
       ( exists $self->{attr}{force} ? 
 	$self->{attr}{force} : $state->Force ) ||
-	cmpVar( exists $self->{attr}{case}, 
-		$self->{attr}{numcmp}, 
-		$self->{attr}{strcmp}, 
+	cmpVar( exists $self->{attr}{case},
+		$self->{attr}{numcmp},
+		$self->{attr}{strcmp},
 		$prev_val, $self->{val} );
 
     if ( $is_not_equal )
@@ -147,7 +152,19 @@ sub cmpVar
 {
   my ( $case, $num, $str, $var1, $var2 ) = @_;
 
-  if ( defined $num && $num )
+  # references that aren't the same
+  if ( ref $var1 ne ref $var2 )
+  {
+      return 1;
+  }
+
+  # references
+  elsif ( ref $var1 )
+  {
+      Data::Compare::Compare( $var1, $var2 );
+  }
+
+  elsif ( defined $num && $num )
   {
     cmp_numVar( $var1, $var2 );
   }

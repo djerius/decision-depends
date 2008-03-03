@@ -10,6 +10,7 @@ all_from 'lib/Decision/Depends.pm';
 
 requires 'YAML';
 requires 'Tie::IxHash';
+requires 'Data::Compare';
 
 build_requires 'Test::More';
 

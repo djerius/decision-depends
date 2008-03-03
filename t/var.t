@@ -1,8 +1,12 @@
+#!perl
+
 use strict;
 use warnings;
 
 use Test::More;
-plan( tests => 16 );
+plan( tests => 21 );
+
+use YAML;
 
 use Decision::Depends;
 use Decision::Depends::Var;
@@ -12,6 +16,7 @@ require 't/depends.pl';
 
 our $verbose = 0;
 our $error = 0;
+my $err;
 
 our ( $deplist, $targets, $deps );
 
@@ -25,13 +30,14 @@ eval {
     submit( -target => 'data/targ1',
 	    -depend => -var => ( -foo => 'data/dep1' ) );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ && 
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [ 'foo' ],
 					time   => [],
 					sig    => [] }} 
-	    ), 'variable dependency, variable name as attribute' );
+	    ), 'variable dependency, variable name as attribute' )
+	    or diag( $err );
 
 # check different means of specifying variable name
 eval {
@@ -41,13 +47,14 @@ eval {
     submit( -target => 'data/targ1',
 	    -depend => '-var=foo' => 'data/dep1'  );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ && 
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [ 'foo' ],
 					time   => [],
 					sig    => [] }} 
-	    ), 'variable dependency, variable name as attr value' );
+	    ), 'variable dependency, variable name as attr value' )
+	    or diag( $err );
 
 # check different means of specifying variable name
 eval {
@@ -57,13 +64,14 @@ eval {
     submit( -target => 'data/targ1',
 	    -depend => -var => { foo => 'data/dep1' } );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ && 
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [ 'foo' ],
 					time   => [],
 					sig    => [] }} 
-	    ), 'variable dependency, variable name as attr value via hashref' );
+	    ), 'variable dependency, variable name as attr value via hashref' )
+	    or diag( $err );
 
 #---------------------------------------------------
 
@@ -75,13 +83,14 @@ eval {
     submit( -target => 'data/targ1',
 	    -depend => -var => ( -foo => 'data/dep1' ) );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ && 
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [ 'foo' ],
 					time   => [],
 					sig    => [] }} 
-	    ), 'variable dependency, no variable' );
+	    ), 'variable dependency, no variable' )
+	    or diag( $err );
 
 #---------------------------------------------------
 
@@ -95,10 +104,11 @@ eval {
 	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
 	    );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ &&
      eq_hash( $deps, { } ),
-     'variable dependency, unchanged value' );
+     'variable dependency, unchanged value' )
+	    or diag( $err );
 
 #---------------------------------------------------
 
@@ -112,14 +122,15 @@ eval {
 	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val2' ) }
 	    );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ &&
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [ 'foo' ],
 					time   => [],
 					sig    => [] } } 
 	    ),
-     'variable dependency, different value' );
+     'variable dependency, different value' )
+	    or diag( $err );
 
 #---------------------------------------------------
 
@@ -133,14 +144,15 @@ eval {
 	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
 	    );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ &&
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [ 'foo' ],
 					time   => [],
 					sig    => [] } } 
 	    ),
-     'local force variable dependency' );
+     'local force variable dependency' )
+	    or diag( $err );
 
 #---------------------------------------------------
 
@@ -155,14 +167,15 @@ eval {
 	    sub { $Decision::Depends::self->{State}->setVar( 'data/targ1', foo => 'val' ) }
 	    );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ &&
      eq_hash( $deps, { 'data/targ1' => {
 					var    => [ 'foo' ],
 					time   => [],
 					sig    => [] } } 
 	    ),
-     'global force variable dependency' );
+     'global force variable dependency' )
+	    or diag( $err );
 
 #---------------------------------------------------
 
@@ -180,8 +193,9 @@ eval {
     $error = 0;
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( ! $error && !$@,  'setup guessed numerical variable deps' );
+$err = $@;
+ok ( ! $error && !$@,  'setup guessed numerical variable deps' )
+	    or diag( $err );
 
 eval {
   my $val = 0.147;
@@ -190,8 +204,9 @@ eval {
     die( "shouldn't get here!\n" );
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( !$@,  'guessed numerical values' );
+$err = $@;
+ok ( !$@,  'guessed numerical values' )
+	    or diag( $err );
 
 
 #---------------------------------------------------
@@ -210,8 +225,9 @@ eval {
     $error = 0;
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( ! $error && !$@,  'setup forced numerical variable deps' );
+$err = $@;
+ok ( ! $error && !$@,  'setup forced numerical variable deps' )
+	    or diag( $err );
 
 eval {
   my $val = 0.147;
@@ -220,8 +236,9 @@ eval {
     die( "shouldn't get here!\n" );
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( !$@,  'forced numerical values' );
+$err = $@;
+ok ( !$@,  'forced numerical values' )
+	    or diag( $err );
 
 eval {
   my $val = 0.147;
@@ -231,8 +248,9 @@ eval {
     $error = 0;
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( !$@,  'forced string compare of num values' );
+$err = $@;
+ok ( !$@,  'forced string compare of num values' )
+	    or diag( $err );
 
 #---------------------------------------------------
 
@@ -250,8 +268,9 @@ eval {
     $error = 0;
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( ! $error && !$@,  'setup forced string variable deps' );
+$err = $@;
+ok ( ! $error && !$@,  'setup forced string variable deps' )
+	    or diag( $err );
 
 eval {
   my $val = 'snake';
@@ -260,8 +279,9 @@ eval {
     die( "shouldn't get here!\n" );
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( !$@,  'forced numerical values' );
+$err = $@;
+ok ( !$@,  'forced numerical values' )
+	    or diag( $err );
 
 eval {
   my $val = 0.147;
@@ -271,8 +291,77 @@ eval {
     $error = 0;
   };
 };
-print STDERR $@ if $@ && $verbose;
-ok ( !$error && !$@,  'forced string compare of num values' );
+$err = $@;
+ok ( !$error && !$@,  'forced string compare of num values' )
+	    or diag( $err );
+
+#---------------------------------------------------
+
+{
+    cleanup();
+    Decision::Depends::Configure( { Verbose => $verbose, File => 'data/deps1' } );
+
+    my $scalar = 'snake';
+    my @array  = ( 'snake' );
+    my %hash   = ( reptile => 'snake' );
+
+    # make sure everything is fresh
+    sub var { return { scalar => $scalar,
+                       array  => \\@array,
+                       hash   => \\%hash }
+          };
+
+    # variable dependency, HASH, ARRAY values
+
+    # first make sure the parsing works
+    eval {
+
+
+        $error = 1;
+        if_dep { -slink => 'data/targ1', 
+                   -var => var();
+             }
+          action {
+              $error = 0;
+          };
+    };
+    $err = $@;
+    ok ( ! $error && !$@,  'hash, array parse' )
+      or diag( $err );
+
+    # make sure output is what is expected
+    ok( eq_hash( YAML::LoadFile( 'data/deps1' )->{Var}{'data/targ1'},
+               {
+                scalar => $scalar,
+                array  => \@array,
+                hash   => \%hash }),
+        "hash, array values" );
+
+    # now change something and see what happens.
+    for my $tst (
+                 [ scalar => sub { $scalar = 'bird' } ],
+                 [ array  => sub { @array = ( 'bird' ) } ],
+                 [ hash   => sub { %hash  = ( avian => 'bird' ) } ]
+                )
+    {
+        my ( $label, $sub ) = @$tst;
+
+        eval {
+            $sub->();
+
+            $error = 1;
+            if_dep { -slink => 'data/targ1', 
+                       -var   => var() }
+              action {
+                  $error = 0;
+              };
+        };
+        $err = $@;
+        ok ( ! $error && !$@,  "change $label" )
+          or diag( $err );
+    }
+
+}
 
 #---------------------------------------------------
 

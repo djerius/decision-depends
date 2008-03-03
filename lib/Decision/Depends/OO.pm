@@ -32,11 +32,13 @@ require Exporter;
 our $VERSION = '0.04';
 
 use Carp;
+use Scalar::Util qw( reftype );
+use Tie::IxHash;
+
 use Decision::Depends::State;
 use Decision::Depends::List;
 use Decision::Depends::Target;
 
-use Tie::IxHash;
 
 
 # regular expression for a floating point number
@@ -234,9 +236,18 @@ sub _build_spec_list
     }
 
     # a value
-    elsif ( 'SCALAR' eq $ref || ! $ref )
+    elsif ( 'SCALAR' eq $ref || 'REF' eq $ref || ! $ref )
     {
       $spec = $$spec if $ref;
+
+      $ref = ref $spec;
+
+      if ( $ref !~ /^(|ARRAY|HASH)$/ )
+      {
+        croak( __PACKAGE__, '::_build_spec_list:', 
+	     "value can only be scalar or ref to scalar, hashref or arrayref!\n" );
+      }
+
 
       $levels->[-1]++;
       my %attr;

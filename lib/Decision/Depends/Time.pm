@@ -47,6 +47,11 @@ sub new
   my $self = { %$spec, state => $state };
 
 
+  # only accept string values
+  croak( __PACKAGE__, 
+      "->new: bad type for Time dependency `$self->{val}': must be scalar" )
+    unless '' eq ref $self->{val};
+
   # ensure that no bogus attributes are set
   my @notok = grep { ! exists $attr{$_} } keys %{$self->{attr}};
   croak( __PACKAGE__, 

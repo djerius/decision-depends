@@ -320,6 +320,17 @@ the last time the target was created. If the contents have changed,
 the step must be redone.  The new value is recorded upon successful
 completion of the step.
 
+Variable values may be scalars, hashes, or arrays. The latter two
+B<must> be passed as a reference to a hashref and a reference to an
+arrayref (not just plain hashrefs and arrayrefs), as B<Decision::Depends>
+uses hashrefs and arrayrefs to group values and atributes.  For example,
+
+  \\%hash
+  \$hashref
+  \\@array
+  \$arrayref
+
+
 There are several methods of specifying the variable name and value.
 
 =over 8
@@ -359,7 +370,7 @@ reserved names for attributes.
 
 =back
 
-Variable dependencies may have the following additional attributes:
+Scalar variable dependencies may have the following additional attributes:
 
 =over 8
 
@@ -383,6 +394,9 @@ number or not; this forces it to treat it as a string if it guesses
 wrong.  This may not be mixed with the B<-str> attribute.
 
 =back
+
+Hash and array values are compared via B<Data::Compare>; there is no
+means of forcing numeric or string comparisons.
 
 =back
 
