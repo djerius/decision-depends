@@ -9,7 +9,7 @@ use Decision::Depends::Var;
 require 't/common.pl';
 require 't/depends.pl';
 
-our $verbose = 0;
+my $err;
 
 our ( $deplist, $targets, $deps );
 
@@ -34,7 +34,7 @@ eval {
       -sig => 'data/sig1',
       );
 };
-print STDERR $@ if $@ && $verbose;
+$err = $@;
 ok ( !$@ &&
      eq_hash( $deps, {
 		      'data/slink' => {
@@ -61,7 +61,8 @@ ok ( !$@ &&
 				      }
 		     }) ,
 
-	      'lots of stuff' );
+	      'lots of stuff' )
+	      or diag( $err );
 
 #---------------------------------------------------
 
@@ -85,10 +86,10 @@ eval {
   action {
     $cnt++;
   };
-
 };
-print STDERR $@ if $@ && $verbose;
-ok ( !$@ && $cnt == 0, 'dependency file reread correctly (1)' );
+$err = $@;
+ok ( !$@ && $cnt == 0, 'dependency file reread correctly (1)' )
+   or diag( $err );
 
 eval {
   $Decision::Depends::self->{State}->EraseState;
@@ -99,7 +100,9 @@ eval {
     $cnt++;
   };
 };
-ok ( !$@ && $cnt == 1, 'dependency file reread correctly (2)' );
+$err = $@;
+ok ( !$@ && $cnt == 1, 'dependency file reread correctly (2)' )
+   or diag( $err );
 
 
 #---------------------------------------------------
