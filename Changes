@@ -1,5 +1,9 @@
 Revision history for Perl extension Decision::Depends.
 
+0.19  Tue Mar  4 09:49:55 EST 2008
+        - new variable dependency code didn't work; fix it and tests
+	  which didn't show failure.
+
 0.18  Mon Mar  3 14:44:09 EST 2008
         - Variable dependencies may now be hashes and arrays as well
 	  as scalars.

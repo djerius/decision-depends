@@ -1,4 +1,42 @@
-2008-03-03 14:51 -0500  djerius  <djerius@cfa.harvard.edu>  (6b77e9989bdf [tip])
+2008-03-04  Diab Jerius  <djerius@cfa.harvard.edu>
+
+	Tag 0.19
+
+2008-03-04 09:51 -0500  djerius  <djerius@cfa.harvard.edu>  (c22b3a6803cd [tip])
+
+	* lib/Decision/Depends.pm, lib/Decision/Depends/List.pm,
+	lib/Decision/Depends/OO.pm, lib/Decision/Depends/Sig.pm,
+	lib/Decision/Depends/State.pm, lib/Decision/Depends/Target.pm,
+	lib/Decision/Depends/Time.pm, lib/Decision/Depends/Var.pm:
+	bump version number
+
+2008-03-04 09:49 -0500  djerius  <djerius@cfa.harvard.edu>  (d8b30f329e79)
+
+	* lib/Decision/Depends/Var.pm, t/var.t:
+	hash & array variable dependencies were seriously broken.
+
+	* got sense of Data::Compare::Compare's return value backwards
+	* stored reference to hash & array so was fooled if the program
+	changed them. now stores clone
+	* typo in testing for illegal comparison attributes
+	* fixed test so it tests correctly. first two mistakes above
+	cancelled each other in the test.
+
+2008-03-03 14:54 -0500  djerius  <djerius@cfa.harvard.edu>  (a7ee27e27b36)
+
+	* .hgtags:
+	Added tag 0.18 for changeset 96d5fa8bd501
+
+2008-03-03 14:53 -0500  djerius  <djerius@cfa.harvard.edu>  (96d5fa8bd501 [0.18])
+
+	* ChangeLog, Changes, MANIFEST.SKIP, README, lib/Decision/Depends.pm,
+	lib/Decision/Depends/List.pm, lib/Decision/Depends/OO.pm,
+	lib/Decision/Depends/Sig.pm, lib/Decision/Depends/State.pm,
+	lib/Decision/Depends/Target.pm, lib/Decision/Depends/Time.pm,
+	lib/Decision/Depends/Var.pm:
+	update for release
+
+2008-03-03 14:51 -0500  djerius  <djerius@cfa.harvard.edu>  (6b77e9989bdf)
 
 	* LICENSE:
 	swap in GPL3
