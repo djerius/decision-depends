@@ -41,6 +41,7 @@ DEPENDENCIES
 	Test::More
 	Data::Compare
 	Tie::IxHash
+	Clone
 
 INSTALLATION
 
