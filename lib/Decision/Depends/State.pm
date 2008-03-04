@@ -31,7 +31,7 @@ use YAML qw();
 use IO::File;
 use Carp;
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 sub new
 {

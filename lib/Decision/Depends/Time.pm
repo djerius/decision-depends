@@ -29,7 +29,7 @@ use Carp;
 
 ## no critic ( ProhibitAccessOfPrivateData )
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 our %attr = ( depend => 1,
 	      depends => 1,
