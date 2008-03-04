@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::More;
-plan( tests => 21 );
+plan( tests => 22 );
 
 use YAML;
 
@@ -336,6 +336,22 @@ ok ( !$error && !$@,  'forced string compare of num values' )
                 array  => \@array,
                 hash   => \%hash }),
         "hash, array values" );
+
+    # same values as before
+    eval {
+
+
+        $error = 0;
+        if_dep { -slink => 'data/targ1', 
+                   -var => var();
+             }
+          action {
+              $error = 1;
+          };
+    };
+    $err = $@;
+    ok ( ! $error && !$@,  'dependency met' )
+      or diag( $err );
 
     # now change something and see what happens.
     for my $tst (

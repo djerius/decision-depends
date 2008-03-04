@@ -27,6 +27,7 @@ use strict;
 use warnings;
 
 use Carp;
+use Clone qw( clone );
 
 our $VERSION = '0.18';
 
@@ -81,8 +82,10 @@ sub new
   # comparison attributes for arrays and hashes are not allowed
   croak( __PACKAGE__,
 	 ": comparison attributes on variable dependencies on hash or arrays are not allowed" )
-    if ref($self->{attr}{var}) =~ m/^(HASH|ARRAY)$/
+    if ref($self->{val}) =~ m/^(HASH|ARRAY)$/
            && grep { exists $self->{attr}{$_}} qw( case numcmp strcmp no_case );
+
+  $self->{val} = clone( $self->{val} ) if ref $self->{val};
 
   bless $self, $class;
 }
@@ -111,9 +114,14 @@ sub depends
 
     if ( $is_not_equal )
     {
+        my $curval = 
+          ref $self->{val} ? YAML::Dump( $self->{val} )
+                           : '(' . $self->{val} . ')';
+        my $preval = 
+          ref $prev_val ? YAML::Dump( $prev_val )
+                        : '(' . $prev_val . ')';
       print STDOUT 
-	"    variable `", $var, "' is now (", $self->{val},
-	"), was ($prev_val)\n"
+	"    variable `", $var, "' is now $curval, was $preval\n"
 	  if $state->Verbose;
 
       push @deps, $var;
@@ -161,7 +169,7 @@ sub cmpVar
   # references
   elsif ( ref $var1 )
   {
-      Data::Compare::Compare( $var1, $var2 );
+      ! Data::Compare::Compare( $var1, $var2 );
   }
 
   elsif ( defined $num && $num )
@@ -172,7 +180,7 @@ sub cmpVar
   elsif ( defined $str && $str )
   {
     cmp_strVar( $case, $var1, $var2 );
-  } 
+  }
 
   elsif ( $var1 =~ /$RE_Float/o && $var2 =~ /$RE_Float/o) 
   {
