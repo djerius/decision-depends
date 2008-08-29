@@ -31,7 +31,7 @@ use IO::File;
 
 ## no critic ( ProhibitAccessOfPrivateData )
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 our %attr = ( target => 1,
 	      targets => 1,

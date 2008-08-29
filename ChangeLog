@@ -1,8 +1,35 @@
-2008-03-04  Diab Jerius  <djerius@cfa.harvard.edu>
+2008-08-29  Diab Jerius  <djerius@cfa.harvard.edu>
 
-	Tag 0.19
+	Tag 0.20
 
-2008-03-04 09:51 -0500  djerius  <djerius@cfa.harvard.edu>  (c22b3a6803cd [tip])
+2008-08-29 15:56 -0400  djerius  <djerius@cfa.harvard.edu>  (049e2e1f2ca8 [tip])
+
+	* t/var.t:
+	Work around Test::More::eq_hash (0.80) adding magic to its passed
+	arguments, which causes clone on them to fail, which causes a test
+	to fail.
+
+2008-08-29 15:52 -0400  djerius  <djerius@cfa.harvard.edu>  (1f88158e3aff)
+
+	* t/var.t:
+	minor code cleanup for consistency
+
+2008-03-04 09:53 -0500  djerius  <djerius@cfa.harvard.edu>  (38b22f50fbc0)
+
+	* .hgtags:
+	Added tag 0.19 for changeset fdae228984f0
+
+2008-03-04 09:53 -0500  djerius  <djerius@cfa.harvard.edu>  (fdae228984f0 [0.19])
+
+	* ChangeLog, Changes:
+	update for release
+
+2008-03-04 09:52 -0500  djerius  <djerius@cfa.harvard.edu>  (cd8c18dce382)
+
+	* Makefile.PL, README:
+	add new dependencies
+
+2008-03-04 09:51 -0500  djerius  <djerius@cfa.harvard.edu>  (c22b3a6803cd)
 
 	* lib/Decision/Depends.pm, lib/Decision/Depends/List.pm,
 	lib/Decision/Depends/OO.pm, lib/Decision/Depends/Sig.pm,
@@ -43,6 +70,7 @@
 
 2008-03-03 14:36 -0500  djerius  <djerius@cfa.harvard.edu>  (3797704d1ca5)
 
+	* MANIFEST: deleted file.
 	* MANIFEST:
 	manifest is now made before distributions
 
@@ -65,6 +93,14 @@
 
 2008-02-27 23:03 -0500  djerius  <djerius@cfa.harvard.edu>  (0b5d01c15067)
 
+	* lib/Decision/Depends.pm, lib/Decision/Depends/List.pm,
+	lib/Decision/Depends/OO.pm, lib/Decision/Depends/Sig.pm,
+	lib/Decision/Depends/State.pm, lib/Decision/Depends/Target.pm,
+	lib/Decision/Depends/Time.pm, lib/Decision/Depends/Var.pm,
+	t/00-load.t, t/perlcritic.t, t/pod.t: new file.
+	* Depends.pm, Depends/List.pm, Depends/OO.pm, Depends/Sig.pm,
+	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
+	Depends/Var.pm, GNUmakefile.local: deleted file.
 	* Depends.pm, Depends/List.pm, Depends/OO.pm, Depends/Sig.pm,
 	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
 	Depends/Var.pm, GNUmakefile.local, Makefile.PL, data/traverse,
@@ -77,11 +113,13 @@
 
 2008-02-25 20:49 -0500  djerius  <djerius@cfa.harvard.edu>  (8c1472ac985a)
 
+	* ChangeLog: new file.
 	* ChangeLog:
 	Added ChangeLog
 
 2008-02-26 06:48 +0000  convert-repo  <convert-repo>  (58603e2e6f3b)
 
+	* .hgtags: new file.
 	* .hgtags:
 	update tags
 
@@ -112,6 +150,8 @@
 
 2003-06-26 13:47 -0400  dj  <dj>  (e3470c348c6d [V0_15])
 
+	* GNUmakefile.local: new file.
+	* GNUmakefile, data/deps: deleted file.
 	* GNUmakefile, GNUmakefile.local, MANIFEST, README, data/deps,
 	data/parse:
 	*** empty log message ***
@@ -255,6 +295,8 @@
 
 2002-03-25 17:10 -0500  dj  <dj>  (368861f20665 [V0_05])
 
+	* t/time_test_dep.t: new file.
+	* t/bogus.t: deleted file.
 	* data/deps, data/traverse, t/bogus.t, t/common.pl, t/depends.pl,
 	t/depends.t, t/if_dep.t, t/parse.t, t/pretend.t, t/sfile.t, t/sig.t,
 	t/time.t, t/time_test_dep.t, t/traverse.t, t/var.t:
@@ -262,6 +304,7 @@
 
 2002-03-25 17:10 -0500  dj  <dj>  (28e5bf685af7)
 
+	* Depends/OO.pm, GNUmakefile: new file.
 	* Changes, Depends.pm, Depends/List.pm, Depends/OO.pm, Depends/Sig.pm,
 	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
 	Depends/Var.pm, GNUmakefile, MANIFEST, README:
@@ -279,6 +322,7 @@
 
 2002-03-07 16:52 -0500  dj  <dj>  (a15c5bc49f0b [V0_03])
 
+	* Depends.html: deleted file.
 	* Changes, Depends.html, Depends.pm, Depends/List.pm, Depends/Sig.pm,
 	Depends/Time.pm, Depends/Var.pm:
 	- further message tweaks.
@@ -308,6 +352,7 @@
 
 2002-03-06 14:26 -0500  dj  <dj>  (02f6bbc4a9c2)
 
+	* LICENSE, README: new file.
 	* LICENSE, MANIFEST, MANIFEST.SKIP, Makefile.PL, README:
 	*** empty log message ***
 
@@ -317,6 +362,12 @@
 
 2002-03-06 09:15 -0500  dj  <dj>  (cb4e4c16b651)
 
+	* Changes, Depends.html, Depends.pm, Depends/List.pm, Depends/Sig.pm,
+	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
+	Depends/Var.pm, MANIFEST, MANIFEST.SKIP, Makefile.PL, data/deps,
+	data/parse, data/traverse, t/bogus.t, t/common.pl, t/depends.pl,
+	t/depends.t, t/if_dep.t, t/parse.t, t/pretend.t, t/sfile.t, t/sig.t,
+	t/time.t, t/traverse.t, t/var.t: new file.
 	* Changes, Depends.html, Depends.pm, Depends/List.pm, Depends/Sig.pm,
 	Depends/State.pm, Depends/Target.pm, Depends/Time.pm,
 	Depends/Var.pm, MANIFEST, MANIFEST.SKIP, Makefile.PL, data/deps,

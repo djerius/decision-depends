@@ -29,7 +29,7 @@ use warnings;
 use Carp;
 use Clone qw( clone );
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 # regular expression for a floating point number
 our $RE_Float = qr/^[+-]?(\d+[.]?\d*|[.]\d+)([dDeE][+-]?\d+)?$/;
