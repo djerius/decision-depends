@@ -8,6 +8,8 @@ plan( tests => 22 );
 
 use YAML;
 
+use Clone qw( clone );
+
 use Decision::Depends;
 use Decision::Depends::Var;
 
@@ -329,12 +331,18 @@ ok ( !$error && !$@,  'forced string compare of num values' )
     ok ( ! $error && !$@,  'hash, array parse' )
       or diag( $err );
 
-    # make sure output is what is expected
-    ok( eq_hash( YAML::LoadFile( 'data/deps1' )->{Var}{'data/targ1'},
-               {
+    # Test::More::eq_array (0.80) does damage to the passed structures
+    # such that it causes subsequent clones to fail.  So, create
+    # a copy of the expected results so that the damage is isolated.
+
+    my $cmp = clone({
                 scalar => $scalar,
                 array  => \@array,
-                hash   => \%hash }),
+                hash   => \%hash });
+
+    # make sure output is what is expected
+    ok( eq_hash( YAML::LoadFile( 'data/deps1' )->{Var}{'data/targ1'},
+                 $cmp ),
         "hash, array values" );
 
     # same values as before
