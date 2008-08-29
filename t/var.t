@@ -350,7 +350,7 @@ ok ( !$error && !$@,  'forced string compare of num values' )
           };
     };
     $err = $@;
-    ok ( ! $error && !$@,  'dependency met' )
+    ok ( ! $error && !$err,  'dependency met' )
       or diag( $err );
 
     # now change something and see what happens.
