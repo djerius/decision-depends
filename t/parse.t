@@ -4,6 +4,8 @@ use warnings;
 use Test::More tests => 1;
 
 use Decision::Depends;
+use Test::Deep;
+
 use YAML qw( DumpFile LoadFile );
 
 our $create = 0;
@@ -21,9 +23,11 @@ my @specs = (
 
 my @res = $Decision::Depends::self->_build_spec_list( undef, undef, \@specs );
 
+delete $_->{id} foreach @res;
+
 DumpFile( 'data/parse', \@res )
   if $create;
 
 my $c_res = LoadFile( 'data/parse' );
 
-ok( eq_array( \@res, $c_res ), 'token parse' );
+cmp_deeply( \@res, bag( @$c_res ) , 'token parse' );

@@ -14,6 +14,7 @@ requires 'Data::Compare';
 requires 'Clone';
 
 build_requires 'Test::More';
+build_requires 'Test::Deep';
 
 auto_install;
 
