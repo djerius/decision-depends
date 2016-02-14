@@ -1,5 +1,13 @@
 Revision history for Perl extension Decision::Depends.
 
+0.21  2016-02-14T12:22:04-0500
+
+   [ BUILD ]
+      * t/parse.t relied upon hash order
+      * modernized build infrastructure to use cpanfile
+      * author tests moved to xt/
+
+
 0.20  2008-08-29T17:16:46-0500
         - work around feature in Test::More 0.80 which caused variable
 	  hash test to fail.
