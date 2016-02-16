@@ -1,6 +1,11 @@
 Revision history for Perl extension Decision::Depends.
 
-0.21  2016-02-14T12:22:04-0500
+0.02_02	2016-02-16T11:53:32-0500
+
+   [ BUILD ]
+      * tests assumed availability of rm executable and POSIX style shell. Oops.
+
+0.20_01  2016-02-14T12:22:04-0500
 
    [ BUILD ]
       * t/parse.t relied upon hash order
