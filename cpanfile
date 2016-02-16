@@ -9,6 +9,7 @@ requires 'Clone';
 on 'test' => sub {
     requires 'Test::More';
     requires 'Test::Deep';
+    requires 'Test::TempDir::Tiny','0.005';
 };
 
 on develop => sub {
